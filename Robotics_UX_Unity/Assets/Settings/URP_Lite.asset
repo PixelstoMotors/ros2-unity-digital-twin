@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 953fb2e9c1a4d9458a7e494c4a7ef75d, type: 3}
+  m_Name: URP_Lite
+  m_EditorClassIdentifier: 
+  m_RendererType: 1
+  m_DeferredRenderer: {fileID: 112000000, guid: 8b06b5a29b7834df7b7732c84e826ac6, type: 2}
+  m_ForwardRenderer: {fileID: 112000000, guid: 8b06b5a29b7834df7b7732c84e826ac6, type: 2}
+  m_MaxAdditionalLights: 4
+  m_StaticLighting: 1
+  m_MainLightRenderingMode: 1
+  m_AdditionalLightRenderingMode: 1
+  m_ReflectionRenderingMode: 1
+  m_MaxReflectionProbes: 16
+  m_AdditionalLightsShadowmapResolution: 2048
+  m_ScreenSpaceShadowOpacity: 0.35
+  m_ScreenSpaceShadowStringQuality: 1
+  m_ClusteringCache: 1
+  m_SupportsDynamicBatching: 0
+  m_SupportsGeometryShaders: 1
+  m_SupportsComputeShaders: 1
+  m_SupportsRayTracingShaders: 0
+  m_VolumeFrameworkUpdateMode: 0
+  m_ShadowCascadeRatios: 0.05
+  m_ShadowCascades: 1
+  m_Cascade2Split: 0.33333334
+  m_Cascade4Split: {x: 0.06666667, y: 0.2, z: 0.46666667}
+  m_Cascade4SplitOverride: 0
+  m_UseDepthPrepass: 0
+  m_DeepFragmentPrepass: 0
+  m_SmallScaleScreenPrepass: 1
+  m_SupportsHDR: 1
+  m_HDRColorBufferUsage: 0
+  m_AntiAliasing: 0
+  m_AntiAliasingMethod: 0
+  m_SupportsMultisampleAutoResolve: 1
+  m_SampleCount: 1
+  m_RenderScale: 1
+  m_UpscaleFilter: 1
+  m_UpscaleScaleMethod: 0
+  m_HDROutput: 0
+  m_MROutput: 0
+  m_AROutput: 0
+  m_AllowEnlightenSupport: 1
+  m_ShadowType: 1
+  m_LocalShadowsSupported: 1
+  m_LocalShadowsAtlasResolution: 2048
+  m_CachedLocalShadowsAtlasResolution: 2048
+  m_DebugLevel: 0
+  m_DefaultRenderer: 0
+  m_DefaultRenderPipelineAssetPath: 
+  m_TransparentRenderQueue: 3058
+  m_DefaultStencilType: 0
+  m_RequireDepthTexture: 0
+  m_RequireNormalTexture: 0
+  m_SupportsCameraDepthTexture: 0
+  m_SupportsCameraNormalTexture: 0
+  m_LightProbeOutsideHullStrategy: 0
+  m_OpaqueLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_TransparentLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_DefaultMaterialID: 0
+  m_LogWhenShaderIsCompiled: 0
+  m_SRPDefaultSettings: {}
+  m_AllowNativeRenderPassInForwardRenderer: 1
+  m_UseNativeRenderPassForForwardEmissive: 0
