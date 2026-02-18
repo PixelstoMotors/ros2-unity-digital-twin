@@ -1,6 +1,10 @@
 # Pixels to Motors - R2R2R Robotics UX
 
 <p align="center">
+  <img src="docs/images/r2r2r_thumbnail.png" alt="R2R2R Methodology Overview" width="800">
+</p>
+
+<p align="center">
   <strong>From Digital Pixels to Real-World Motion</strong><br>
   デザイナー歴29年の知見を活かした、AI時代のロボットUX実装
 </p>
@@ -16,6 +20,10 @@ Real (Scan) → Render (Unity) → Train/Simulate → Real (Deploy)
      ↓              ↓                 ↓              ↓
   3DGS撮影     リッチUX環境       AI学習/ROS      実機展開
 ```
+
+<p align="center">
+  <img src="docs/images/r2r2r_flow.png" alt="R2R2R Flow" width="600">
+</p>
 
 ### 私たちの強み
 
@@ -43,6 +51,7 @@ Real (Scan) → Render (Unity) → Train/Simulate → Real (Deploy)
 ```
 Robotics_UX_Project/
 ├── docs/
+│   ├── images/              # サムネイル画像
 │   ├── technical_demo_video_plan.md  # デモ動画構成
 │   ├── unity_ros2_setup.md          # 環境構築
 │   └── SETUP_NOTES.md              # セットアップメモ
@@ -80,5 +89,5 @@ ros2 launch ...
 
 <p align="center">
 © 2026 Pixels to Motors / ADAPT DESIGN<br>
-デザイナー歴29年の誇りを、胸に。
+デザイナー歴29年の誇りを，胸に。
 </p>
