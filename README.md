@@ -1,7 +1,7 @@
 # Pixels to Motors - R2R2R Robotics UX
 
 <p align="center">
-  <img src="docs/images/r2r2r_thumbnail.png" alt="R2R2R Methodology Overview" width="800">
+  <img src="docs/images/r2r2r_thumbnail.webp" alt="R2R2R Methodology Overview" width="800">
 </p>
 
 <p align="center">
