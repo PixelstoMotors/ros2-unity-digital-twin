@@ -1,0 +1,32 @@
+# Unity
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# macOS
+.DS_Store
+*.swp
+*~
+
+# Unity specific
+Assets/External/
+Packages/packages-lock.json
+ProjectSettings/ProjectVersion.txt
+
+# ROS
+*.pyc
+__pycache__/
+
+# Logs
+*.log
