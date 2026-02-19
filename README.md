@@ -1,8 +1,12 @@
 # Pixels to Motors - Robotics UX
 
 <p align="center">
+  <img src="docs/images/r2r2r_thumbnail.webp" alt="R2R2R Methodology Overview" width="800">
+</p>
+
+<p align="center">
   <strong>From Digital Pixels to Real-World Motion</strong><br>
-  デザイナー歴29年の知見を活かした、AI時代のロボットUX実装
+  デザイナー歴29年の知見を活かした，AI時代のロボットUX実装
 </p>
 
 ---
