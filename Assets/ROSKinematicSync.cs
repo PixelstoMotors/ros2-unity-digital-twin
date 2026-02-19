@@ -27,8 +27,9 @@ public class ROSKinematicSync : MonoBehaviour
     // Joint mapping
     private Dictionary<string, Transform> jointMap = new Dictionary<string, Transform>();
     private Dictionary<string, float> jointPhaseOffset = new Dictionary<string, float>();
+    private Dictionary<string, float> currentAngles = new Dictionary<string, float>();
 
-    // Delay buffer: タイムスタンプ付きの関節角度履歴
+    // Delay buffer: タイムスタンプ付きの関節角度履歴（1秒分）
     private struct JointSnapshot
     {
         public float timestamp;
@@ -39,6 +40,10 @@ public class ROSKinematicSync : MonoBehaviour
 
     private float lastMessageTime = -999f;
     private string lastPositions = "";
+
+    // 補間設定
+    private const float LERP_SPEED = 10f;
+    private const int MAX_BUFFER_SIZE = 60;  // 1秒分（60fps想定）
 
     void Start()
     {
@@ -85,11 +90,17 @@ public class ROSKinematicSync : MonoBehaviour
         foreach (var body in bodies)
         {
             body.immovable = true;
+            body.linearDamping = 0f;
+            body.angularDamping = 3f;  // 10 → 3 に低減
+            body.jointFriction = 1f;    // 10 → 1 に低減
+
             ArticulationDrive drive = body.xDrive;
             drive.stiffness = 0;
             drive.damping = 0;
             body.xDrive = drive;
         }
+
+        Debug.Log($"[{gameObject.name}] All joints set to kinematic mode (immovable)");
     }
 
     void OnJointStateReceived(JointStateMsg msg)
@@ -113,8 +124,8 @@ public class ROSKinematicSync : MonoBehaviour
 
             delayBuffer.Enqueue(snap);
 
-            // バッファが大きくなりすぎないよう制限（最大 200 フレーム = 10秒分）
-            while (delayBuffer.Count > 200)
+            // バッファを1秒分に制限
+            while (delayBuffer.Count > MAX_BUFFER_SIZE)
                 delayBuffer.Dequeue();
 
             // lastPositions 更新（HUD 表示用）
@@ -165,8 +176,18 @@ public class ROSKinematicSync : MonoBehaviour
             string jointName = snap.names[i].Trim();
             if (jointMap.ContainsKey(jointName))
             {
-                float angleDeg = snap.positions[i] * Mathf.Rad2Deg;
-                jointMap[jointName].localRotation = Quaternion.Euler(angleDeg, 0, 0);
+                float targetAngleDeg = snap.positions[i] * Mathf.Rad2Deg;
+
+                // 現在の角度を取得または初期化
+                if (!currentAngles.ContainsKey(jointName))
+                    currentAngles[jointName] = targetAngleDeg;
+
+                // 滑らかに補間
+                float currentAngle = currentAngles[jointName];
+                float newAngle = Mathf.Lerp(currentAngle, targetAngleDeg, Time.deltaTime * LERP_SPEED);
+                currentAngles[jointName] = newAngle;
+
+                jointMap[jointName].localRotation = Quaternion.Euler(newAngle, 0, 0);
             }
         }
     }
