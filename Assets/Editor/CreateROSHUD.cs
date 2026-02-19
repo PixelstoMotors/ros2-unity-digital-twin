@@ -26,9 +26,9 @@ public class CreateROSHUD
         canvas.sortingOrder = 100;
 
         var scaler = canvasGO.AddComponent<CanvasScaler>();
-        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1920, 1080);
-        scaler.matchWidthOrHeight = 0.5f;
+        // Constant Pixel Size: 解像度に関係なく常に同じピクセルサイズで表示
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
+        scaler.scaleFactor = 1.0f;
 
         canvasGO.AddComponent<GraphicRaycaster>();
 
@@ -44,7 +44,7 @@ public class CreateROSHUD
         panelRect.anchorMax = new Vector2(0f, 1f);
         panelRect.pivot = new Vector2(0f, 1f);
         panelRect.anchoredPosition = new Vector2(20f, -20f);
-        panelRect.sizeDelta = new Vector2(520f, 110f);
+        panelRect.sizeDelta = new Vector2(700f, 160f);
 
         // ── ステータステキスト（ROS2: ONLINE/OFFLINE） ──────
         var statusGO = new GameObject("StatusText");
