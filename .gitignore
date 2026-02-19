@@ -38,3 +38,9 @@ crashlytics-build.properties
 
 # Packages - keep manifest.json but ignore resolved packages
 Packages/packages-lock.json
+
+# Large binary files (exceed GitHub 100MB limit)
+# PLY point cloud files - store locally only
+*.ply
+# GaussianSplat binary data files
+Assets/GaussianAssets/*.bytes
