@@ -9,6 +9,12 @@ public class RobotArmyGenerator : EditorWindow
     private GameObject robotPrefab;
     private Transform parentTransform;
     
+    // 配置パラメータ
+    private float xSpacing = 0.7f;  // X方向の間隔
+    private float zSpacing = 0.7f;  // Z方向の間隔
+    private const float MIN_SPACING = 0.3f;  // 最小間隔（衝突防止）
+    private const float MAX_SPACING = 2.0f;  // 最大間隔
+    
     [MenuItem("R2R2R/Generate Robot Army")]
     public static void ShowWindow()
     {
@@ -18,6 +24,33 @@ public class RobotArmyGenerator : EditorWindow
     void OnGUI()
     {
         GUILayout.Label("Robot Army Generator", EditorStyles.boldLabel);
+        
+        EditorGUILayout.Space();
+        GUILayout.Label("Spacing Settings", EditorStyles.boldLabel);
+        
+        // 間隔設定
+        xSpacing = EditorGUILayout.Slider(
+            new GUIContent(
+                "X Spacing (m)",
+                "Distance between robots in X direction"
+            ),
+            xSpacing,
+            MIN_SPACING,
+            MAX_SPACING
+        );
+        
+        zSpacing = EditorGUILayout.Slider(
+            new GUIContent(
+                "Z Spacing (m)",
+                "Distance between robots in Z direction"
+            ),
+            zSpacing,
+            MIN_SPACING,
+            MAX_SPACING
+        );
+        
+        EditorGUILayout.Space();
+        GUILayout.Label("Robot Settings", EditorStyles.boldLabel);
         
         robotPrefab = EditorGUILayout.ObjectField(
             "Robot Prefab", 
@@ -72,14 +105,12 @@ public class RobotArmyGenerator : EditorWindow
         }
         
         // グリッド配置のパラメータ
-        const float X_SPACING = 1.0f;  // X方向の間隔
-        const float Z_SPACING = 1.0f;  // Z方向の間隔
         const int ROWS = 5;           // 縦の列数
         const int COLUMNS = 2;        // 横の列数
         
         // 中央を原点として左右に配置するためのオフセット
-        float xStart = -X_SPACING / 2f;  // 左列の開始位置
-        float zStart = -(Z_SPACING * (ROWS - 1)) / 2f;  // 奥行きの開始位置
+        float xStart = -xSpacing / 2f;  // 左列の開始位置
+        float zStart = -(zSpacing * (ROWS - 1)) / 2f;  // 奥行きの開始位置
         
         // アームを生成
         for (int row = 0; row < ROWS; row++)
@@ -87,8 +118,8 @@ public class RobotArmyGenerator : EditorWindow
             for (int col = 0; col < COLUMNS; col++)
             {
                 // 位置を計算
-                float x = xStart + (col * X_SPACING);
-                float z = zStart + (row * Z_SPACING);
+                float x = xStart + (col * xSpacing);
+                float z = zStart + (row * zSpacing);
                 Vector3 position = new Vector3(x, 0, z);
                 
                 // アームを生成
@@ -115,8 +146,9 @@ public class RobotArmyGenerator : EditorWindow
         // 生成したアームを選択
         Selection.activeGameObject = armyRoot;
         
-        // 全体の配置を検証
+        // 配置の検証
         ValidateArmyFormation(armyRoot);
+        CheckPhysicalCollisions(armyRoot);
     }
     
     /// <summary>
@@ -135,6 +167,34 @@ public class RobotArmyGenerator : EditorWindow
             {
                 Debug.LogError($"Invalid physics parameters in {arm.name}! " +
                              $"Stiffness: {drive.stiffness}, Damping: {drive.damping}");
+            }
+        }
+    }
+    
+    /// <summary>
+    /// 物理的な衝突の可能性をチェック
+    /// </summary>
+    void CheckPhysicalCollisions(GameObject armyRoot)
+    {
+        var robots = armyRoot.GetComponentsInChildren<Transform>();
+        float minAllowedDistance = MIN_SPACING * 0.9f; // 10%のマージン
+        
+        for (int i = 0; i < robots.Length; i++)
+        {
+            for (int j = i + 1; j < robots.Length; j++)
+            {
+                float distance = Vector3.Distance(
+                    robots[i].position,
+                    robots[j].position
+                );
+                
+                if (distance < minAllowedDistance)
+                {
+                    Debug.LogWarning(
+                        $"Potential collision detected between {robots[i].name} and {robots[j].name}! " +
+                        $"Distance: {distance:F3}m"
+                    );
+                }
             }
         }
     }
