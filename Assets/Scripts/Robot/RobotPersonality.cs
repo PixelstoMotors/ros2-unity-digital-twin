@@ -28,7 +28,11 @@ public class RobotPersonality : MonoBehaviour
     [SerializeField]
     [Tooltip("左右の振れ幅（度）")]
     [Range(0f, 90f)]
-    private float m_swingRange = 45.0f;
+    [Tooltip("左右の振れ幅（度）- 左側のロボットの首振り角度")]
+    private float m_swingRange = 30.0f;
+
+    // ベース関節のインデックス（ヨー軸回転用）
+    private const int BASE_JOINT_INDEX = 1;  // 通常、0か1がベース関節
     
     // 内部パラメータ
     private ArticulationBody[] joints;
@@ -62,29 +66,30 @@ public class RobotPersonality : MonoBehaviour
     
     void Update()
     {
-        foreach (var joint in joints)
+        // ベース関節（ヨー軸）の取得
+        if (joints == null || joints.Length <= BASE_JOINT_INDEX) return;
+        var baseJoint = joints[BASE_JOINT_INDEX];
+        
+        if (baseJoint == null || baseJoint.jointType == ArticulationJointType.FixedJoint) return;
+        
+        float targetAngle;
+        if (isRightSide)
         {
-            if (joint == null || joint.jointType == ArticulationJointType.FixedJoint) continue;
-            
-            float targetAngle;
-            if (isRightSide)
-            {
-                // 右側（X座標が正）：0度で完全停止
-                targetAngle = m_angleOffset;
-            }
-            else
-            {
-                // 左側（X座標が負）：サイン波で動かす
-                targetAngle = (Mathf.Sin(Time.time * m_speedMultiplier + individualDelay) * m_swingRange) + m_angleOffset;
-            }
-            
-            lastAngle = targetAngle;
-            
-            // 関節に適用（物理パラメータは変更しない）
-            var drive = joint.xDrive;
-            drive.target = targetAngle;
-            joint.xDrive = drive;
+            // 右側（X座標が正）：0度で完全停止
+            targetAngle = m_angleOffset;
         }
+        else
+        {
+            // 左側（X座標が負）：左右にスイング
+            targetAngle = (Mathf.Sin(Time.time * m_speedMultiplier + individualDelay) * m_swingRange) + m_angleOffset;
+        }
+        
+        lastAngle = targetAngle;
+        
+        // ベース関節のみに適用（物理パラメータは変更しない）
+        var drive = baseJoint.xDrive;
+        drive.target = targetAngle;
+        baseJoint.xDrive = drive;
     }
 
     /// <summary>
