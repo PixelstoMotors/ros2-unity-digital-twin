@@ -7,7 +7,7 @@ using UnityEngine;
 public class RobotPersonality : MonoBehaviour
 {
     // 物理パラメータの保護定数
-    private const float JOINT_STIFFNESS = 20000f;
+    private const float JOINT_STIFFNESS = 20000f; // link1の設定値に合わせて更新済み
     private const float JOINT_DAMPING = 2000f;
     private const float JOINT_FORCE_LIMIT = 1000f;
     private const float JOINT_MAX_VELOCITY = 100f;
@@ -26,13 +26,19 @@ public class RobotPersonality : MonoBehaviour
     private float m_angleOffset = 0f;
     
     [SerializeField]
-    [Tooltip("左右の振れ幅（度）")]
+    [Tooltip("水平方向の振れ幅（度）")]
     [Range(0f, 90f)]
-    [Tooltip("左右の振れ幅（度）- 左側のロボットの首振り角度")]
-    private float m_swingRange = 30.0f;
+    private float m_horizontalSwingRange = 30.0f;
 
-    // ベース関節のインデックス（ヨー軸回転用）
-    private const int BASE_JOINT_INDEX = 1;  // 通常、0か1がベース関節
+    [SerializeField]
+    [Tooltip("垂直方向の振れ幅（度）")]
+    [Range(0f, 90f)]
+    private float m_verticalSwingRange = 30.0f;
+
+    // link1: 左右の回転（ヨー軸）を担当
+    private const int BASE_JOINT_INDEX = 1;
+    // link2: 上下の回転（ピッチ軸）を担当
+    private const int SHOULDER_JOINT_INDEX = 2;
     
     // 内部パラメータ
     private ArticulationBody[] joints;
@@ -66,30 +72,35 @@ public class RobotPersonality : MonoBehaviour
     
     void Update()
     {
-        // ベース関節（ヨー軸）の取得
-        if (joints == null || joints.Length <= BASE_JOINT_INDEX) return;
+        // ベース関節（link1: ヨー）とショルダー関節（link2: ピッチ）の取得
+        if (joints == null || joints.Length <= SHOULDER_JOINT_INDEX) return;
         var baseJoint = joints[BASE_JOINT_INDEX];
+        var shoulderJoint = joints[SHOULDER_JOINT_INDEX];
         
-        if (baseJoint == null || baseJoint.jointType == ArticulationJointType.FixedJoint) return;
-        
-        float targetAngle;
+        if (baseJoint == null || shoulderJoint == null || 
+            baseJoint.jointType == ArticulationJointType.FixedJoint ||
+            shoulderJoint.jointType == ArticulationJointType.FixedJoint) return;
+
+        // 両方の関節をまずオフセット値で初期化
+        var baseDrive = baseJoint.xDrive;
+        var shoulderDrive = shoulderJoint.xDrive;
+        baseDrive.target = m_angleOffset;
+        shoulderDrive.target = m_angleOffset;
+
         if (isRightSide)
         {
-            // 右側（X座標が正）：0度で完全停止
-            targetAngle = m_angleOffset;
+            // 右側: link2（ピッチ）のみ上下スイング
+            shoulderDrive.target = (Mathf.Sin(Time.time * m_speedMultiplier + individualDelay) * m_verticalSwingRange) + m_angleOffset;
+            lastAngle = shoulderDrive.target;
+            shoulderJoint.xDrive = shoulderDrive;
         }
         else
         {
-            // 左側（X座標が負）：左右にスイング
-            targetAngle = (Mathf.Sin(Time.time * m_speedMultiplier + individualDelay) * m_swingRange) + m_angleOffset;
+            // 左側: link1（ヨー）のみ左右スイング - anchorRotationは保持
+            baseDrive.target = (Mathf.Sin(Time.time * m_speedMultiplier + individualDelay) * m_horizontalSwingRange) + m_angleOffset;
+            lastAngle = baseDrive.target;
+            baseJoint.xDrive = baseDrive;
         }
-        
-        lastAngle = targetAngle;
-        
-        // ベース関節のみに適用（物理パラメータは変更しない）
-        var drive = baseJoint.xDrive;
-        drive.target = targetAngle;
-        baseJoint.xDrive = drive;
     }
 
     /// <summary>
@@ -129,7 +140,7 @@ public class RobotPersonality : MonoBehaviour
         GUI.DrawTexture(new Rect(20, yPos, 400, 30), Texture2D.whiteTexture);
         GUI.color = Color.white;
         GUI.Label(new Rect(30, yPos + 5, 390, 20), 
-            $"{gameObject.name}: {(isRightSide ? "Right (Stop)" : "Left (Moving)")}, Current: {lastAngle:F1}°");
+            $"{gameObject.name}: {(isRightSide ? "Right (Vertical)" : "Left (Horizontal)")}, Current: {lastAngle:F1}°");
     }
     
     /// <summary>
