@@ -44,3 +44,5 @@ Packages/packages-lock.json
 *.ply
 # GaussianSplat binary data files
 Assets/GaussianAssets/*.bytes
+
+.tmp.driveupload/
