@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ADAPT DESIGN | Pixels to Motors — デジタルツインが生み出す次世代ロボティクスUX</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ══════════════════════════════════════════════
+       DESIGN SYSTEM v5
+       Base : v4 Light × Cyan × ADAPT DESIGN Brand
+       Update :
+         ① ロゴ高さ 18px に統一
+         ② ロゴテキスト font-family: 'A1ゴシック M', sans-serif 明示
+         ③ 全黒テキスト #242424 再徹底
+         ④ 日本語 Noto Sans JP 継続
+         ⑤ 説明文 font-size:16px / font-weight:500
+         ⑥ btn-primary 14px / btn-outline 白背景+14px
+         ⑦ Hero タグ削除
+    ══════════════════════════════════════════════ */
+    :root {
+      --bg:          #FAFAF9;
+      --bg-2:        #F4F3F0;
+      --bg-invert:   #111111;
+      --surface:     #FFFFFF;
+      --surface-2:   #EFEFED;
+
+      --border:      #E2E0DC;
+      --border-2:    #C8C5BF;
+      --border-inv:  rgba(255,255,255,0.08);
+
+      /* ★ テキスト → #242424 に統一 */
+      --text:        #242424;
+      --text-2:      #6B6860;
+      --text-3:      #A09D98;
+      --text-inv:    #F0EEE9;
+      --text-inv-2:  rgba(240,238,233,0.6);
+
+      --cyan:        #0BA5C4;
+      --cyan-light:  #E0F6FB;
+      --cyan-mid:    #3CC6E0;
+      --cyan-dark:   #076E84;
+
+      --red:         #E84040;
+      --amber:       #D97706;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { background: var(--bg); scroll-behavior: smooth; }
+
+    /* ★ body — 日本語: Noto Sans JP / 英数: システムで DM Mono を上書き */
+    body {
+      background: var(--bg);
+      color: var(--text);
+      /* 日本語テキストに Noto Sans JP を適用。
+         欧文は DM Mono で別途指定するため body は JP 優先に */
+      font-family: 'Noto Sans JP', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.75;
+      font-weight: 400;
+    }
+
+    /* 英数専用クラス — DM Mono を維持 */
+    .font-mono { font-family: 'DM Mono', monospace; }
+
+    /* ── EYEBROW TAG ── */
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--cyan);
+    }
+    .eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 1px;
+      background: var(--cyan);
+    }
+
+    /* ── BUTTONS ── */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--cyan);
+      color: #fff;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 500;
+      font-size: 14px;   /* ★ 14px に統一 */
+      letter-spacing: 0.04em;
+      padding: 13px 24px;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: background 0.15s, box-shadow 0.15s;
+      cursor: pointer;
+    }
+    .btn-primary:hover {
+      background: var(--cyan-mid);
+      box-shadow: 0 4px 20px rgba(11,165,196,0.25);
+    }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #FFFFFF;          /* ★ 白背景 */
+      color: #242424;               /* ★ #242424 */
+      font-family: 'DM Mono', monospace;
+      font-size: 14px;              /* ★ 14px */
+      letter-spacing: 0.08em;
+      padding: 13px 20px;
+      border: 1px solid var(--border-2);
+      border-radius: 2px;
+      text-decoration: none;
+      transition: border-color 0.15s, color 0.15s;
+      cursor: pointer;
+    }
+    .btn-outline:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+      border-color: var(--cyan);
+      box-shadow: 0 4px 24px rgba(11,165,196,0.08);
+    }
+
+    /* ── DIVIDER ── */
+    .divider { height: 1px; background: var(--border); }
+
+    /* ── PILL ── */
+    .pill {
+      display: inline-block;
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cyan-dark);
+      background: var(--cyan-light);
+      border: 1px solid rgba(11,165,196,0.2);
+      padding: 3px 9px;
+      border-radius: 2px;
+    }
+
+    /* ── ICON BOX ── */
+    .icon-box {
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--border-2);
+      border-radius: 3px;
+      background: var(--bg-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .icon-box svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--cyan);
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ── CHECKLIST ── */
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-2);
+      line-height: 1.6;
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+    .checklist-item .check {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 1px solid var(--cyan);
+      background: var(--cyan-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+    .checklist-item .check::after {
+      content: '';
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--cyan);
+    }
+
+    /* ── PRICING RECOMMEND ── */
+    .pricing-rec {
+      background: var(--bg-invert);
+      border-color: var(--bg-invert) !important;
+      color: var(--text-inv);
+    }
+    .pricing-rec .checklist-item { color: var(--text-inv-2); }
+    .pricing-rec .check { background: rgba(11,165,196,0.15); border-color: var(--cyan-mid); }
+    .pricing-rec .check::after { background: var(--cyan-mid); }
+    .pricing-rec .divider { background: rgba(255,255,255,0.07); }
+
+    /* ── INVERT SECTION ── */
+    .section-invert {
+      background: var(--bg-invert);
+      color: var(--text-inv);
+    }
+    .section-invert .eyebrow { color: var(--cyan-mid); }
+    .section-invert .eyebrow::before { background: var(--cyan-mid); }
+    .section-invert .divider { background: rgba(255,255,255,0.07); }
+
+    /* ── NAV ── */
+    .site-nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bg-2); }
+    ::-webkit-scrollbar-thumb { background: var(--cyan); border-radius: 2px; }
+
+    /* ── HOVER UNDERLINE ── */
+    a.nav-link {
+      position: relative;
+      text-decoration: none;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--text-3);
+      text-transform: uppercase;
+      transition: color 0.15s;
+    }
+    a.nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: var(--cyan);
+      transition: width 0.2s;
+    }
+    a.nav-link:hover { color: var(--cyan); }
+    a.nav-link:hover::after { width: 100%; }
+
+    /* ── STEP CONNECTOR ── */
+    .step-connector {
+      width: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      align-self: stretch;
+      flex-shrink: 0;
+    }
+
+    /* ── LOGO MARK (SVG inline) ── */
+    .logo-mark {
+      /* ★ 高さ 18px に固定。SVG は正方形なので width も同値 */
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      display: block;
+    }
+    .logo-mark path,
+    .logo-mark polygon,
+    .logo-mark rect {
+      fill: #242424;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .grid-hero  { display: flex !important; flex-direction: column; }
+      .grid-3     { display: flex !important; flex-direction: column; }
+      .grid-2     { display: flex !important; flex-direction: column; }
+      .step-row   { flex-direction: column !important; }
+      .step-connector { width: 100% !important; height: 36px;
+        border-top: none !important; border-bottom: none !important;
+        border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+      section { padding-left: 20px !important; padding-right: 20px !important; }
+      .cta-inner  { padding: 40px 24px !important; }
+      .hide-sp    { display: none !important; }
+      .service-row { grid-template-columns: 48px 1fr !important; }
+      .service-icon { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     HEADER
+     ロゴマーク（SVG inline） + "ADAPT DESIGN"
+══════════════════════════════════════════ -->
+<header class="site-nav">
+  <div style="max-width:1080px;margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+
+    <!-- Logo area -->
+    <a href="#" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+
+      <!-- ★ ロゴマーク: SVG inline -->
+      <!-- 実装時は <img src="logo.svg" alt="ADAPT DESIGN logo" width="28" height="28"> に差し替え可 -->
+      <svg class="logo-mark" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#242424" d="M156.5,14.8h1.8s.3-1.4.3-1.4h6.7s.5,1.4.5,1.4l20.6.4.5,1.4,11,.4v1.8s7.2,0,7.2,0v1.8h7.6v1.8s3.6,0,3.6,0v1.8c.3.3,6.1-.7,5.4,1.7.2.2,3,.2,3.7.5s0,1.1.6,1.4,3.6.3,3.7.4v1.8s3.6,0,3.6,0v1.8s3.6,0,3.6,0v1.8s3.6,0,3.6,0v1.8c.7.2,3.2.3,3.5.6s0,1.2.5,1.5,1.5,0,1.8.3-.2,1,.3,1.3,3.1.3,3.3.5v1.8s1.8,0,1.8,0v1.8s2.2,0,2.2,0v1.8s3.6,0,3.6,0v2.2s1.8,0,1.8,0v1.8s1.8,0,1.8,0v1.8s2.2,0,2.2,0v1.8s1.8,0,1.8,0v1.8s1.8,0,1.8,0v1.8s1.8,0,1.8,0v1.8s1.8,0,1.8,0v1.8s1.8,0,1.8,0v1.8s2,.4,2,.4l.2,1.8h1.8s0,1.8,0,1.8h1.2c0,0,0,1.8,0,1.8h2.2s0,2.2,0,2.2h1.8s0,3.1,0,3.1h1.8s0,2.2,0,2.2h1.8s.5,3.6.5,3.6h1.8s0,1.8,0,1.8h1.2c0,0,.3,1.8.3,1.8l2,.4v3.6s1.8,0,1.8,0v3.6s1.8,0,1.8,0v3.6s2,.4,2,.4l.2,3.6h1.8s0,3.3,0,3.3l1.4.5.4,3.7h1.8s0,3.6,0,3.6h1.8s0,5.8,0,5.8h1.8s0,5.4,0,5.4h1.8s.4,7.4.4,7.4l1.4.5.4,8.5,1.4.5.4,12.7h1.8s0,26.4,0,26.4h-1.8s-.4,12.7-.4,12.7l-1.4.5-.4,8.9-1.4.5-.4,5.6h-1.8v7.2h-1.8s0,5.4,0,5.4h-1.8s0,4,0,4h-1.8s-.6,3.5-.6,3.5h-1.2c-.3,1.9.2,3.6-1.9,3.9l-.5,3.7h-1.8s0,3.6,0,3.6h-1.8s0,3.6,0,3.6h-1.8s0,2.2,0,2.2h-1.8s-.5,3.6-.5,3.6h-1.8s0,1.8,0,1.8h-1.2c0,0-.3,1.8-.3,1.8l-2,.4v3.1s-1.8,0-1.8,0v2.2s-1.8,0-1.8,0v1.8s-1.8,0-1.8,0v1.8s-1.8,0-1.8,0c.6,2.3-1.5,1.9-1.8,2.5s-.3,2.7-.5,2.8h-1.8s0,2.3,0,2.3h-1.8s0,1.8,0,1.8h-1.8s0,1.8,0,1.8h-2.2s0,1.8,0,1.8c-.1.1-2.2.1-2.8.5s-.3,1.3-.7,1.6c-1,.7-2.3-.8-1.8,2h-1.8s0,1.8,0,1.8h-1.8s0,1.8,0,1.8h-3.6s0,1.8,0,1.8h-1.8s0,1.8,0,1.8h-2.2s0,1.8,0,1.8l-3.5.5v1.8s-2.3,0-2.3,0v1.8s-3.1,0-3.1,0v1.8s-4,0-4,0v1.8s-3.6,0-3.6,0v1.8c-2.5-.5-1.9,1.4-2.3,1.7s-4,0-5,.5,0,1.1-.6,1.4-3.6.3-3.7.4v1.8s-5.4,0-5.4,0v1.8s-5.4,0-5.4,0v1.8s-5.8,0-5.8,0v1.8s-6.9.4-6.9.4l-.5,1.4-10.7.4-.5,1.4-29.8.4v-35.8h-35.4v-35.4h35.4v-39h-35.4v-74.8h35.4v-37.2h-35.8v-35.2l.7-.7h35.2V14.8ZM156.5,52.5v31.4h1.8s0,2.2,0,2.2h31.8v-1.8s1.8-.3,1.8-.3v-31.5s-1.8,0-1.8,0v-1.8s-31.8,0-31.8,0v1.8s-1.8,0-1.8,0ZM156.5,164.4v31.4h35.4v-31.4h-1.8s0-1.8,0-1.8h-31.5s-.3,1.8-.3,1.8h-1.8Z"/>
+        <polygon fill="#242424" points="118.8 87.8 118.8 121.4 85.2 121.4 85.3 106.9 83.9 106.4 83.9 87.8 118.8 87.8"/>
+        <polygon fill="#242424" points="117.5 199.8 117.5 201.6 118.9 201.9 118.9 231.4 117.5 231.7 117.5 233.4 85.2 233.4 85.7 199.8 117.5 199.8"/>
+        <path fill="#242424" d="M117,274.6v33.1h-31.4c-.6-6.6-.6-13.3-.5-20,0-3,0-5.9,0-8.9s.3-2.9,1.7-2.5v-1.8h30.1Z"/>
+        <polygon fill="#242424" points="85.9 14.8 116.8 14.8 117.5 15.5 117.5 46.4 116.8 47.1 85.9 47.1 85.2 46.4 85.2 15.5 85.9 14.8"/>
+        <polygon fill="#242424" points="78.1 164.4 78.1 171.6 79.9 171.6 79.9 190.4 78.1 190.4 78.1 195.8 48 195.8 48 164.4 78.1 164.4"/>
+        <polygon fill="#242424" points="10.9 130.8 12.7 130.8 12.7 128.6 38.6 129.1 38.6 156.8 12.7 156.8 12.7 155 10.9 155 10.9 130.8"/>
+        <rect fill="#242424" x="87.5" y="129.1" width="27.8" height="27.8"/>
+        <path fill="#242424" d="M76.3,91.4v5.8s1.8,0,1.8,0v5.1s-1.8.3-1.8.3l-.4,17h-25.5c0-1.1-.4-2.2-.5-3.3-.4-5.9-.7-17.7,0-23.3s0-1.2.7-1.5h25.8Z"/>
+        <path fill="#242424" d="M14.4,229.8v1.8s-1.8,0-1.8,0v-1.8s-1.8,0-1.8,0v-26c1.1,0,2.2-.4,3.3-.5,5.9-.4,17.7-.7,23.3,0s1.2,0,1.5.7v25.1l-.7.7H14.4Z"/>
+        <polygon fill="#242424" points="38.6 54.2 38.6 80.7 10.9 80.2 10.9 54.2 38.6 54.2"/>
+        <polygon fill="#242424" points="76.3 267 49.8 267 49.8 241.3 50.5 240.6 75.6 240.6 76.3 241.3 76.3 267"/>
+      </svg>
+
+      <!-- ★ ロゴテキスト: "ADAPT DESIGN"
+           font-family に 'A1ゴシック M' を第一候補として明示。
+           Webフォントが未ロードの場合は sans-serif にフォールバック。
+           Figma取込後は A1ゴシック M に手動差し替え可能な構成。
+           font-size: 20px / color: #242424 は厳守。 -->
+      <span style="
+        font-family: 'A1ゴシック M', 'A1Gothic', sans-serif;
+        font-size: 20px;
+        font-weight: 500;
+        color: #242424;
+        letter-spacing: 0.04em;
+        line-height: 1;
+      ">ADAPT DESIGN</span>
+    </a>
+
+    <!-- Nav links -->
+    <nav style="display:flex;align-items:center;gap:24px;" class="hide-sp">
+      <a href="#problem" class="nav-link">Problem</a>
+      <a href="#solution" class="nav-link">R2R2R</a>
+      <a href="#service" class="nav-link">Service</a>
+      <a href="#pricing" class="nav-link">Pricing</a>
+    </nav>
+
+    <!-- CTA button -->
+    <a href="#cta" class="btn-primary" style="font-size:13px;padding:9px 18px;color:#fff;">
+      メッセージ →
+    </a>
+  </div>
+</header>
+
+
+<!-- ══════════════════════════════════════════
+     01 · HERO
+══════════════════════════════════════════ -->
+<section id="hero" style="padding:88px 24px 80px;position:relative;overflow:hidden;
+  background-image:
+    linear-gradient(var(--border) 1px,transparent 1px),
+    linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:40px 40px;">
+
+  <!-- Ambient blob -->
+  <div style="position:absolute;top:-140px;right:-100px;width:520px;height:520px;
+    background:radial-gradient(circle,rgba(11,165,196,0.07) 0%,transparent 68%);
+    pointer-events:none;"></div>
+
+  <!-- ════════════════════════════════════════
+       R2R2R CYCLE ORBIT ANIMATION
+       Real → to Sim → to Real を軌道として可視化
+  ════════════════════════════════════════ -->
+  <canvas id="r2r2r-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;"></canvas>
+
+  <div style="max-width:1080px;margin:0 auto;position:relative;">
+    <div class="grid-hero" style="display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;">
+
+      <!-- Left -->
+      <div style="display:flex;flex-direction:column;gap:28px;">
+
+        <span class="eyebrow">UX Before Hardware</span>
+
+        <h1 style="
+          font-family:'Noto Sans JP',sans-serif;
+          font-weight:700;
+          font-size:clamp(34px,4.5vw,56px);
+          line-height:1.25;
+          letter-spacing:-0.01em;
+          color:#242424;
+        ">
+          デジタルツインを<br/>
+          <span style="color:var(--cyan);">意思決定の</span><br/>
+          練習場へ。
+        </h1>
+
+        <p style="font-family:'Noto Sans JP',sans-serif;font-size:16px;color:var(--text-2);line-height:1.9;max-width:420px;font-weight:500;">
+          ロボットUXと運用設計から逆算する、実装型デジタルツイン学習プラットフォーム。Real → to Sim → to Real のサイクルで、現場の判断をデータにする。
+        </p>
+
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+          <a href="#cta" class="btn-primary">
+            初期構想の無料壁打ち（30分）
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#solution" class="btn-outline">R2R2Rを見る ↓</a>
+        </div>
+
+      </div><!-- /Left -->
+
+      <!-- Right: Flow diagram -->
+      <div>
+        <div class="card" style="padding:0;overflow:hidden;border-radius:6px;">
+          <!-- Window bar -->
+          <div style="padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg-2);display:flex;align-items:center;gap:8px;">
+            <div style="width:8px;height:8px;border-radius:50%;background:#EF4444;opacity:0.7;"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:#F59E0B;opacity:0.7;"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:#22C55E;opacity:0.7;"></div>
+            <span class="font-mono" style="font-size:9px;color:var(--text-3);letter-spacing:0.12em;margin-left:8px;">P2M / R2R2R FLOW</span>
+          </div>
+          <!-- Diagram -->
+          <div style="padding:36px 28px;display:flex;flex-direction:column;gap:20px;">
+            <div style="display:flex;align-items:stretch;gap:0;">
+              <!-- REAL -->
+              <div style="flex:1;padding:14px 12px;border:1px solid var(--border);border-radius:4px 0 0 4px;background:var(--surface);display:flex;flex-direction:column;gap:5px;">
+                <span class="font-mono" style="font-size:8px;letter-spacing:0.15em;color:var(--cyan);">REAL</span>
+                <div style="font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:13px;color:#242424;">Capture</div>
+                <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-3);line-height:1.5;">iPhone<br/>Luma AI</div>
+              </div>
+              <!-- Arrow -->
+              <div style="width:28px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;">
+                <span class="font-mono" style="font-size:11px;color:var(--cyan);">→</span>
+              </div>
+              <!-- SIM -->
+              <div style="flex:1;padding:14px 12px;border:1px solid rgba(11,165,196,0.3);background:var(--cyan-light);display:flex;flex-direction:column;gap:5px;">
+                <span class="font-mono" style="font-size:8px;letter-spacing:0.15em;color:var(--cyan-dark);">to SIM</span>
+                <div style="font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:13px;color:#242424;">Setup</div>
+                <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-3);line-height:1.5;">Unity<br/>Isaac Sim</div>
+              </div>
+              <!-- Arrow -->
+              <div style="width:28px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;">
+                <span class="font-mono" style="font-size:11px;color:var(--cyan);">→</span>
+              </div>
+              <!-- REAL (Action) -->
+              <div style="flex:1;padding:14px 12px;border:1px solid var(--border);border-radius:0 4px 4px 0;background:var(--surface);display:flex;flex-direction:column;gap:5px;">
+                <span class="font-mono" style="font-size:8px;letter-spacing:0.15em;color:var(--cyan);">to REAL</span>
+                <div style="font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:13px;color:#242424;">Action</div>
+                <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-3);line-height:1.5;">RL Policy<br/>実機展開</div>
+              </div>
+            </div>
+            <!-- Loop label -->
+            <div style="padding:10px 14px;border:1px solid var(--border);border-radius:3px;background:var(--bg-2);text-align:center;">
+              <span class="font-mono" style="font-size:9px;letter-spacing:0.18em;color:var(--text-3);">∞ &nbsp; REAL · SIM · REAL &nbsp;—&nbsp; THE CYCLE REPEATS</span>
+            </div>
+            <!-- Stats -->
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+              <div style="text-align:center;padding:12px 6px;background:var(--bg-2);border:1px solid var(--border);border-radius:3px;">
+                <div class="font-mono" style="font-size:20px;font-weight:500;color:var(--cyan);">×10</div>
+                <div style="font-family:'Noto Sans JP',sans-serif;font-size:10px;color:var(--text-3);margin-top:2px;">学習速度</div>
+              </div>
+              <div style="text-align:center;padding:12px 6px;background:var(--bg-2);border:1px solid var(--border);border-radius:3px;">
+                <div class="font-mono" style="font-size:20px;font-weight:500;color:var(--cyan);">0</div>
+                <div style="font-family:'Noto Sans JP',sans-serif;font-size:10px;color:var(--text-3);margin-top:2px;">実機損傷リスク</div>
+              </div>
+              <div style="text-align:center;padding:12px 6px;background:var(--bg-2);border:1px solid var(--border);border-radius:3px;">
+                <div class="font-mono" style="font-size:20px;font-weight:500;color:var(--cyan);">3</div>
+                <div style="font-family:'Noto Sans JP',sans-serif;font-size:10px;color:var(--text-3);margin-top:2px;">実装ステップ</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Cyan accent line -->
+<div style="height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);"></div>
+
+
+<!-- ══════════════════════════════════════════
+     02 · PROBLEM
+══════════════════════════════════════════ -->
+<section id="problem" style="padding:96px 24px;background:var(--bg);">
+  <div style="max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:52px;">
+
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <span class="eyebrow">The Problem</span>
+      <h2 style="font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:clamp(26px,3.5vw,42px);letter-spacing:-0.01em;color:#242424;line-height:1.3;">
+        現場の違和感、3つの壁。
+      </h2>
+      <!-- リード文 : v5レイアウトそのまま、テキストのみ差し替え -->
+      <p style="font-family:'Noto Sans JP',sans-serif;font-size:16px;font-weight:400;color:#242424;max-width:560px;line-height:1.9;">
+        デジタルツイン投資が現場の意思決定に繋がらない——その根本的な理由がここにある。
+      </p>
+    </div>
+
+    <!-- Cards : v5のpaddingとgap構造を維持 -->
+    <div class="grid-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
+
+      <!-- P1 -->
+      <div class="card" style="padding:28px;display:flex;flex-direction:column;gap:20px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="icon-box">
+            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <span class="font-mono" style="font-size:32px;font-weight:500;color:rgba(11,165,196,0.1);line-height:1;user-select:none;">01</span>
+        </div>
+        <div>
+          <!-- 見出し : 18px / weight:700 -->
+          <h3 style="font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:18px;color:#242424;margin-bottom:8px;">3D化しただけで終わる</h3>
+          <!-- 説明文 : 14px / weight:400 -->
+          <p style="font-family:'Noto Sans JP',sans-serif;font-size:14px;font-weight:400;color:#242424;line-height:1.85;">可視化そのものがゴールになっている。美しいモデルがあっても、現場の意思決定フローとは切り離されたまま。</p>
+        </div>
+        <div style="padding-top:16px;border-top:1px solid var(--border);">
+          <span class="font-mono" style="font-size:9px;letter-spacing:0.12em;color:var(--red);">VISUALIZATION ≠ DECISION</span>
+        </div>
+      </div>
+
+      <!-- P2 -->
+      <div class="card" style="padding:28px;display:flex;flex-direction:column;gap:20px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="icon-box">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+          </div>
+          <span class="font-mono" style="font-size:32px;font-weight:500;color:rgba(11,165,196,0.1);line-height:1;user-select:none;">02</span>
+        </div>
+        <div>
+          <h3 style="font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:18px;color:#242424;margin-bottom:8px;">現場が使わない</h3>
+          <p style="font-family:'Noto Sans JP',sans-serif;font-size:14px;font-weight:400;color:#242424;line-height:1.85;">UI/UXが現場の運用フローに馴染んでいない。エンジニア視点で設計されたシステムは、オペレーターに届かない。</p>
+        </div>
+        <div style="padding-top:16px;border-top:1px solid var(--border);">
+          <span class="font-mono" style="font-size:9px;letter-spacing:0.12em;color:var(--red);">ADOPTION RATE → ZERO</span>
+        </div>
+      </div>
+
+      <!-- P3 -->
+      <div class="card" style="padding:28px;display:flex;flex-direction:column;gap:20px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="icon-box">
+            <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <span class="font-mono" style="font-size:32px;font-weight:500;color:rgba(11,165,196,0.1);line-height:1;user-select:none;">03</span>
+        </div>
+        <div>
+          <h3 style="font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:18px;color:#242424;margin-bottom:8px;">実機検証のコストとリスク</h3>
+          <p style="font-family:'Noto Sans JP',sans-serif;font-size:14px;font-weight:400;color:#242424;line-height:1.85;">学習に数ヶ月かかり、破損リスクが高い。実環境での試行錯誤は、時間・コスト・安全性のすべてを圧迫する。</p>
+        </div>
+        <div style="padding-top:16px;border-top:1px solid var(--border);">
+          <span class="font-mono" style="font-size:9px;letter-spacing:0.12em;color:var(--amber);">HIGH COST · HIGH RISK</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- パンチライン : v5の左ボーダーデザインを維持 / テキスト・スタイルのみ更新 -->
+    <div style="padding:24px 28px;border-left:2px solid var(--cyan);background:var(--cyan-light);border-radius:0 4px 4px 0;">
+      <!-- ★ 16px / weight:500 に更新 -->
+      <p style="font-family:'Noto Sans JP',sans-serif;font-size:16px;font-weight:500;color:#242424;line-height:1.9;">
+        デジタルツインは「見るもの」ではなく、「練習するもの」でなければならない。
+      </p>
+      <span class="font-mono" style="font-size:9px;color:var(--cyan-dark);letter-spacing:0.1em;margin-top:8px;display:block;">— P2M Design Principle</span>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+
+<!-- ══════════════════════════════════════════
+     03 · SOLUTION: R2R2R (dark section)
+══════════════════════════════════════════ -->
+<section id="solution" class="section-invert" style="padding:96px 24px;position:relative;overflow:hidden;">
+  <!-- Grid texture — 変更なし -->
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(60,198,224,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(60,198,224,0.04) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;"></div>
+  <!-- Glow — 変更なし -->
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:800px;height:400px;background:radial-gradient(ellipse,rgba(11,165,196,0.07) 0%,transparent 70%);pointer-events:none;"></div>
+
+  <div style="max-width:1080px;margin:0 auto;position:relative;display:flex;flex-direction:column;gap:52px;">
+
+    <!-- Section header -->
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <span class="eyebrow">Solution — R2R2R</span>
+      <h2 style="font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:clamp(26px,3.5vw,42px);letter-spacing:-0.01em;color:var(--text-inv);line-height:1.3;">
+        計測・学習・運用を、<br/>
+        <span style="color:var(--cyan-mid);">一気通貫で設計する。</span>
+      </h2>
+      <!-- リード文 : 16px / weight:400 -->
+      <p style="font-family:'Noto Sans JP',sans-serif;font-size:16px;font-weight:400;color:var(--text-inv-2);max-width:480px;line-height:1.9;">
+        Real → to Sim → to Real。現実空間の取得からシミュレーション・強化学習・実機展開まで、一本の設計思想で繋ぐ。
+      </p>
+    </div>
+
+    <!-- Steps — レイアウト構造は維持 -->
+    <div class="step-row" style="display:flex;align-items:stretch;gap:0;">
+
+      <!-- Step 1 -->
+      <div style="flex:1;padding:28px 24px;display:flex;flex-direction:column;gap:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:4px 0 0 4px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span class="font-mono" style="font-size:9px;letter-spacing:0.18em;color:var(--cyan-mid);">01 / REAL</span>
+          <span class="font-mono" style="font-size:22px;color:rgba(60,198,224,0.1);line-height:1;user-select:none;font-weight:500;">R</span>
+        </div>
+        <div class="icon-box" style="background:rgba(255,255,255,0.05);border-color:rgba(60,198,224,0.25);">
+          <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        </div>
+        <div>
+          <!-- 見出し : 18px / weight:600 -->
+          <h3 style="font-family:'Noto Sans JP',sans-serif;font-weight:600;font-size:18px;color:var(--text-inv);margin-bottom:8px;">Capture</h3>
+          <!-- 説明文 : 14px / weight:400 -->
+          <p style="font-family:'Noto Sans JP',sans-serif;font-size:14px;font-weight:400;color:var(--text-inv-2);line-height:1.85;">iPhone / Luma AIによる高精度空間取得。現場環境をスキャンしてデジタルに落とし込む。</p>
+        </div>
+        <div style="margin-top:auto;display:flex;gap:6px;flex-wrap:wrap;">
+          <span class="pill" style="background:rgba(60,198,224,0.1);border-color:rgba(60,198,224,0.2);color:var(--cyan-mid);">iPhone</span>
+          <span class="pill" style="background:rgba(60,198,224,0.1);border-color:rgba(60,198,224,0.2);color:var(--cyan-mid);">Luma AI</span>
+          <span class="pill" style="background:rgba(60,198,224,0.1);border-color:rgba(60,198,224,0.2);color:var(--cyan-mid);">3DGS</span>
+        </div>
+      </div>
+
+      <!-- Connector — 変更なし -->
+      <div class="step-connector" style="background:rgba(11,165,196,0.05);border-color:rgba(255,255,255,0.06);">
+        <span class="font-mono" style="font-size:16px;color:var(--cyan-mid);">→</span>
+      </div>
+
+      <!-- Step 2 (highlighted) -->
+      <div style="flex:1;padding:28px 24px;display:flex;flex-direction:column;gap:16px;background:rgba(11,165,196,0.08);border:1px solid rgba(60,198,224,0.2);">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span class="font-mono" style="font-size:9px;letter-spacing:0.18em;color:var(--cyan-mid);">02 / to SIM</span>
+          <span class="font-mono" style="font-size:22px;color:rgba(60,198,224,0.15);line-height:1;user-select:none;font-weight:500;">S</span>
+        </div>
+        <div class="icon-box" style="background:rgba(255,255,255,0.05);border-color:rgba(60,198,224,0.3);">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        </div>
+        <div>
+          <h3 style="font-family:'Noto Sans JP',sans-serif;font-weight:600;font-size:18px;color:var(--text-inv);margin-bottom:8px;">Setup</h3>
+          <p style="font-family:'Noto Sans JP',sans-serif;font-size:14px;font-weight:400;color:var(--text-inv-2);line-height:1.85;">Unity / Isaac Sim上での物理シミュレーション構築。安全な仮想空間でロボットを学習させる。</p>
+        </div>
+        <div style="margin-top:auto;display:flex;gap:6px;flex-wrap:wrap;">
+          <span class="pill" style="background:rgba(60,198,224,0.1);border-color:rgba(60,198,224,0.2);color:var(--cyan-mid);">Unity</span>
+          <span class="pill" style="background:rgba(60,198,224,0.1);border-color:rgba(60,198,224,0.2);color:var(--cyan-mid);">Isaac Sim</span>
+        </div>
+      </div>
+
+      <!-- Connector — 変更なし -->
+      <div class="step-connector" style="background:rgba(11,165,196,0.05);border-color:rgba(255,255,255,0.06);">
+        <span class="font-mono" style="font-size:16px;color:var(--cyan-mid);">→</span>
+      </div>
+
+      <!-- Step 3 -->
+      <div style="flex:1;padding:28px 24px;display:flex;flex-direction:column;gap:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:0 4px 4px 0;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span class="font-mono" style="font-size:9px;letter-spacing:0.18em;color:var(--cyan-mid);">03 / to REAL</span>
+          <span class="font-mono" style="font-size:22px;color:rgba(60,198,224,0.1);line-height:1;user-select:none;font-weight:500;">R</span>
+        </div>
+        <div class="icon-box" style="background:rgba(255,255,255,0.05);border-color:rgba(60,198,224,0.25);">
+          <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </div>
+        <div>
+          <h3 style="font-family:'Noto Sans JP',sans-serif;font-weight:600;font-size:18px;color:var(--text-inv);margin-bottom:8px;">Action</h3>
+          <p style="font-family:'Noto Sans JP',sans-serif;font-size:14px;font-weight:400;color:var(--text-inv-2);line-height:1.85;">強化学習（RL）を経て実機とUIへ反映。シミュレーションで鍛えたポリシーを現場に展開する。</p>
+        </div>
+        <div style="margin-top:auto;display:flex;gap:6px;flex-wrap:wrap;">
+          <span class="pill" style="background:rgba(60,198,224,0.1);border-color:rgba(60,198,224,0.2);color:var(--cyan-mid);">RL Policy</span>
+          <span class="pill" style="background:rgba(60,198,224,0.1);border-color:rgba(60,198,224,0.2);color:var(--cyan-mid);">HRI UX</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats strip — 数値はcyan維持、ラベルのみ14px/weight:400 に統一 -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);border:1px solid rgba(60,198,224,0.15);border-radius:4px;overflow:hidden;background:rgba(11,165,196,0.05);">
+      <div style="padding:28px 24px;border-right:1px solid rgba(255,255,255,0.06);">
+        <div class="font-mono" style="font-size:36px;font-weight:500;color:var(--cyan-mid);line-height:1;">×10</div>
+        <div style="font-family:'Noto Sans JP',sans-serif;font-size:14px;font-weight:400;color:var(--text-inv-2);margin-top:8px;">実機比 学習速度</div>
+      </div>
+      <div style="padding:28px 24px;border-right:1px solid rgba(255,255,255,0.06);">
+        <div class="font-mono" style="font-size:36px;font-weight:500;color:var(--cyan-mid);line-height:1;">0</div>
+        <div style="font-family:'Noto Sans JP',sans-serif;font-size:14px;font-weight:400;color:var(--text-inv-2);margin-top:8px;">実機損傷リスク</div>
+      </div>
+      <div style="padding:28px 24px;">
+        <div class="font-mono" style="font-size:36px;font-weight:500;color:var(--cyan-mid);line-height:1;">3 steps</div>
+        <div style="font-family:'Noto Sans JP',sans-serif;font-size:14px;font-weight:400;color:var(--text-inv-2);margin-top:8px;">R2R2R 一気通貫実装</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+
+<!-- ══════════════════════════════════════════
+     04 · SERVICE
+══════════════════════════════════════════ -->
+<section id="service" style="padding:96px 24px;background:var(--bg-2);">
+  <div style="max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:52px;">
+
+    <!-- Section header — 左揃え縦積み（eyebrow → h2 → リード文） -->
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <span class="eyebrow">Service Menu</span>
+      <h2 style="font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:clamp(26px,3.5vw,42px);letter-spacing:-0.01em;color:#242424;line-height:1.3;">提供内容</h2>
+      <!-- リード文 : h2直下・左寄せ / 16px / weight:400 / #242424 -->
+      <p style="font-family:'Noto Sans JP',sans-serif;font-size:16px;font-weight:400;color:#242424;line-height:1.9;max-width:560px;">
+        空間取得からUX設計まで、デジタルツインの「活用」に必要なすべてを、一気通貫で設計します。
+      </p>
+    </div>
+
+    <!-- リスト — グリッド・ボーダー・ホバー構造は維持 -->
+    <div style="border:1px solid var(--border);border-radius:4px;overflow:hidden;background:var(--surface);">
+
+      <!-- S1 -->
+      <div class="service-row" style="display:grid;grid-template-columns:56px 1fr auto;align-items:center;padding:28px;border-bottom:1px solid var(--border);transition:background 0.15s;cursor:default;" onmouseover="this.style.background='var(--cyan-light)'" onmouseout="this.style.background='transparent'">
+        <span class="font-mono" style="font-size:11px;color:var(--text-3);letter-spacing:0.1em;">01</span>
+        <div style="padding:0 24px;border-left:1px solid var(--border);">
+          <!-- 見出し : 18px / weight:600 / #242424 -->
+          <h3 style="font-family:'Noto Sans JP',sans-serif;font-weight:600;font-size:18px;color:#242424;margin-bottom:8px;">デジタルツイン構築</h3>
+          <!-- 説明文 : 14px / weight:400 / #242424 -->
+          <p style="font-family:'Noto Sans JP',sans-serif;font-size:14px;font-weight:400;color:#242424;line-height:1.85;">空間・設備・ロボットの統合モデル化。現場をそのままデジタル空間に再現し、意思決定のベースを構築します。</p>
+        </div>
+        <div class="icon-box service-icon" style="margin-left:24px;">
+          <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        </div>
+      </div>
+
+      <!-- S2 -->
+      <div class="service-row" style="display:grid;grid-template-columns:56px 1fr auto;align-items:center;padding:28px;border-bottom:1px solid var(--border);transition:background 0.15s;cursor:default;" onmouseover="this.style.background='var(--cyan-light)'" onmouseout="this.style.background='transparent'">
+        <span class="font-mono" style="font-size:11px;color:var(--text-3);letter-spacing:0.1em;">02</span>
+        <div style="padding:0 24px;border-left:1px solid var(--border);">
+          <h3 style="font-family:'Noto Sans JP',sans-serif;font-weight:600;font-size:18px;color:#242424;margin-bottom:8px;">学習データ生成</h3>
+          <p style="font-family:'Noto Sans JP',sans-serif;font-size:14px;font-weight:400;color:#242424;line-height:1.85;">実機を使わずに行動学習を高速化。シミュレーション環境での強化学習で、安全・低コストにロボットを賢くする。</p>
+        </div>
+        <div class="icon-box service-icon" style="margin-left:24px;">
+          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+      </div>
+
+      <!-- S3 -->
+      <div class="service-row" style="display:grid;grid-template-columns:56px 1fr auto;align-items:center;padding:28px;transition:background 0.15s;cursor:default;" onmouseover="this.style.background='var(--cyan-light)'" onmouseout="this.style.background='transparent'">
+        <span class="font-mono" style="font-size:11px;color:var(--text-3);letter-spacing:0.1em;">03</span>
+        <div style="padding:0 24px;border-left:1px solid var(--border);">
+          <h3 style="font-family:'Noto Sans JP',sans-serif;font-weight:600;font-size:18px;color:#242424;margin-bottom:8px;">HRI 運用設計</h3>
+          <p style="font-family:'Noto Sans JP',sans-serif;font-size:14px;font-weight:400;color:#242424;line-height:1.85;">人とロボットが自然に共存するUX設計。Human-Robot Interactionを現場目線で再設計し、定着率を高める。</p>
+        </div>
+        <div class="icon-box service-icon" style="margin-left:24px;">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+
+<!-- ══════════════════════════════════════════
+     05 · PRICING
+══════════════════════════════════════════ -->
+<section id="pricing" style="padding:96px 24px;background:var(--bg);">
+  <div style="max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:52px;">
+
+    <!-- Section header -->
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <span class="eyebrow">Pricing</span>
+      <h2 style="font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:clamp(26px,3.5vw,42px);letter-spacing:-0.01em;color:#242424;line-height:1.3;">プラン</h2>
+    </div>
+
+    <!-- 3-column: center card slightly wider, all cards same height via stretch -->
+    <div class="grid-3" style="display:grid;grid-template-columns:1fr 1.05fr 1fr;gap:14px;align-items:stretch;">
+
+      <!-- ① EXPERIENCE -->
+      <div class="card" style="padding:32px;display:flex;flex-direction:column;gap:22px;background:#FFFFFF;">
+
+        <span class="font-mono" style="font-size:9px;letter-spacing:0.18em;color:var(--text-3);text-transform:uppercase;">Experience</span>
+
+        <!-- メインコピー（主役） -->
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <p style="font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:18px;color:#242424;line-height:1.6;margin:0;">
+            最短3日で、現場を<br>「3Dで説明できる状態」に。
+          </p>
+          <!-- 価格（確認事項） -->
+          <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">
+            <span style="font-family:'DM Mono',monospace;font-size:18px;font-weight:500;color:#242424;">39万円〜</span>
+            <span style="font-family:'Noto Sans JP',sans-serif;font-size:11px;font-weight:400;color:var(--text-3);">※月3社限定 / βフェーズ価格</span>
+          </div>
+        </div>
+
+        <div style="height:1px;background:var(--border);"></div>
+
+        <!-- 訴求ポイント -->
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="checklist-item" style="font-size:14px;font-weight:400;color:#242424;align-items:flex-start;">
+            <div class="check" style="margin-top:3px;flex-shrink:0;"></div>
+            <span>経営承認を加速させる「動くデモ」の即時提供</span>
+          </div>
+          <div class="checklist-item" style="font-size:14px;font-weight:400;color:#242424;align-items:flex-start;">
+            <div class="check" style="margin-top:3px;flex-shrink:0;"></div>
+            <span>現場のデジタル化による「合意形成コスト」の削減</span>
+          </div>
+          <div class="checklist-item" style="font-size:14px;font-weight:400;color:#242424;align-items:flex-start;">
+            <div class="check" style="margin-top:3px;flex-shrink:0;"></div>
+            <span>投資判断のための具体的エビデンス取得</span>
+          </div>
+        </div>
+
+        <a href="#cta" class="btn-outline" style="justify-content:center;margin-top:auto;">詳細を問い合わせる</a>
+      </div>
+
+      <!-- ② BUILD（主役・ダーク #242424 背景） -->
+      <div style="
+        padding:40px 32px;
+        display:flex;flex-direction:column;gap:24px;
+        background:#242424;
+        border-radius:4px;
+        position:relative;overflow:hidden;
+      ">
+        <!-- シアンアクセントライン -->
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:var(--cyan);"></div>
+
+        <!-- Plan label + 推奨バッジ -->
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+          <span class="font-mono" style="font-size:9px;letter-spacing:0.18em;color:var(--cyan-mid);text-transform:uppercase;">Build</span>
+          <span class="font-mono" style="font-size:8px;background:var(--cyan);color:#fff;padding:3px 8px;border-radius:2px;letter-spacing:0.1em;flex-shrink:0;">推奨</span>
+        </div>
+
+        <!-- メインコピー（主役） -->
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <p style="font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:18px;color:#FFFFFF;line-height:1.6;margin:0;">
+            環境変化に「学習で適応する」、<br>次世代ロボティクス基盤を構築。
+          </p>
+          <!-- 価格（確認事項） -->
+          <span style="font-family:'DM Mono',monospace;font-size:18px;font-weight:500;color:var(--cyan-mid);">250万円〜</span>
+        </div>
+
+        <div style="height:1px;background:rgba(255,255,255,0.1);"></div>
+
+        <!-- 訴求ポイント -->
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="checklist-item" style="font-size:14px;font-weight:400;color:rgba(255,255,255,0.8);align-items:flex-start;">
+            <div class="check" style="margin-top:3px;flex-shrink:0;"></div>
+            <span>ティーチングの限界を超える、自律型AIの自社保有</span>
+          </div>
+          <div class="checklist-item" style="font-size:14px;font-weight:400;color:rgba(255,255,255,0.8);align-items:flex-start;">
+            <div class="check" style="margin-top:3px;flex-shrink:0;"></div>
+            <span>現場の状況変化をリアルタイムに学習に反映</span>
+          </div>
+          <div class="checklist-item" style="font-size:14px;font-weight:400;color:rgba(255,255,255,0.8);align-items:flex-start;">
+            <div class="check" style="margin-top:3px;flex-shrink:0;"></div>
+            <span>持続的に進化し続けるロボット運用インフラの確立</span>
+          </div>
+        </div>
+
+        <!-- ボタン: シアン背景で最も目立たせる -->
+        <a href="#cta" class="btn-primary" style="justify-content:center;margin-top:auto;font-size:14px;">無料壁打ちで相談 →</a>
+      </div>
+
+      <!-- ③ ADVISORY -->
+      <div class="card" style="padding:32px;display:flex;flex-direction:column;gap:22px;background:#FFFFFF;">
+
+        <span class="font-mono" style="font-size:9px;letter-spacing:0.18em;color:var(--text-3);text-transform:uppercase;">Advisory</span>
+
+        <!-- メインコピー（主役） -->
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <p style="font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:18px;color:#242424;line-height:1.6;margin:0;">
+            ロボットを「設備」から<br>「チームメンバー」へ。
+          </p>
+          <!-- 価格（確認事項） -->
+          <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">
+            <span style="font-family:'DM Mono',monospace;font-size:18px;font-weight:500;color:#242424;">月額 50万円〜120万円</span>
+          </div>
+        </div>
+
+        <div style="height:1px;background:var(--border);"></div>
+
+        <!-- 訴求ポイント -->
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="checklist-item" style="font-size:14px;font-weight:400;color:#242424;align-items:flex-start;">
+            <div class="check" style="margin-top:3px;flex-shrink:0;"></div>
+            <span>ロボットUX / HRI運用設計の継続的コンサルティング</span>
+          </div>
+          <div class="checklist-item" style="font-size:14px;font-weight:400;color:#242424;align-items:flex-start;">
+            <div class="check" style="margin-top:3px;flex-shrink:0;"></div>
+            <span>中長期的な自動化ロードマップの策定支援</span>
+          </div>
+          <div class="checklist-item" style="font-size:14px;font-weight:400;color:#242424;align-items:flex-start;">
+            <div class="check" style="margin-top:3px;flex-shrink:0;"></div>
+            <span>現場定着に向けた組織変革パートナーシップ</span>
+          </div>
+        </div>
+
+        <a href="#cta" class="btn-outline" style="justify-content:center;margin-top:auto;">エンタープライズ相談 →</a>
+      </div>
+
+    </div>
+
+    <!-- ══ 前提条件ブロック ══ -->
+    <div style="
+      border-left: 2px solid var(--cyan);
+      background: var(--bg-2);
+      border-radius: 0 4px 4px 0;
+      padding: 28px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    ">
+
+      <!-- タイトル行 -->
+      <div style="display:flex;align-items:center;gap:10px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span style="font-family:'Noto Sans JP',sans-serif;font-size:14px;font-weight:700;color:#242424;letter-spacing:0.02em;">Starter Pack 前提条件</span>
+      </div>
+
+      <!-- 本文 -->
+      <p style="font-family:'Noto Sans JP',sans-serif;font-size:13px;font-weight:400;color:#242424;line-height:1.85;margin:0;">
+        本パッケージは「既存ロボット資産を活用した高速PoC」を前提としています。
+      </p>
+
+      <!-- 2カラム -->
+      <div class="grid-2" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+
+        <!-- 左: ご準備いただくもの -->
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <p style="font-family:'Noto Sans JP',sans-serif;font-size:13px;font-weight:700;color:#242424;margin:0;">クライアント様にご準備いただくもの</p>
+          <div style="display:flex;align-items:flex-start;gap:8px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;"><polyline points="20 6 9 17 4 12"/></svg>
+            <span style="font-family:'Noto Sans JP',sans-serif;font-size:13px;font-weight:400;color:#242424;line-height:1.75;">ロボットのURDFデータ（ROS標準）または FBX / STEP 等のCADデータ</span>
+          </div>
+          <div style="padding-left:22px;display:flex;flex-direction:column;gap:4px;">
+            <p style="font-family:'Noto Sans JP',sans-serif;font-size:12px;font-weight:400;color:var(--text-2);margin:0;">※ いずれか必須</p>
+            <p style="font-family:'Noto Sans JP',sans-serif;font-size:12px;font-weight:400;color:var(--text-2);margin:0;">※ プロジェクト開始日（Day 1）までのご支給をお願いしています。</p>
+          </div>
+        </div>
+
+        <!-- 右: 含まれない作業範囲 -->
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <p style="font-family:'Noto Sans JP',sans-serif;font-size:13px;font-weight:700;color:#242424;margin:0;">以下はStarterパックの価格には含まれません：</p>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:flex-start;gap:8px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span style="font-family:'Noto Sans JP',sans-serif;font-size:13px;font-weight:400;color:#242424;line-height:1.75;">ロボット本体の3Dモデリング新規作成</span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:8px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span style="font-family:'Noto Sans JP',sans-serif;font-size:13px;font-weight:400;color:#242424;line-height:1.75;">URDFのゼロからの構築</span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:8px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span style="font-family:'Noto Sans JP',sans-serif;font-size:13px;font-weight:400;color:#242424;line-height:1.75;">実機計測による物理パラメータ推定</span>
+            </div>
+          </div>
+          <p style="font-family:'Noto Sans JP',sans-serif;font-size:12px;font-weight:400;color:var(--text-2);margin:0;padding-left:22px;">これらが必要な場合は、別途お見積りとなります。</p>
+        </div>
+
+      </div>
+
+      <!-- 仕切り線 -->
+      <div style="height:1px;background:var(--border);"></div>
+
+      <!-- 価値訴求補足 -->
+      <p class="font-mono" style="font-size:10px;letter-spacing:0.08em;color:var(--text-3);margin:0;line-height:1.75;">
+        Pixels to Motors は『学習とUX設計』に集中することで、通常の1/10のコストを実現しています。
+      </p>
+
+    </div>
+
+    <!-- 補足テキスト -->
+    <p style="font-family:'Noto Sans JP',sans-serif;font-size:13px;font-weight:400;color:var(--text-3);text-align:center;line-height:1.8;">
+      すべてのプランは初回30分の無料壁打ちから始まります。まず「何から始めるか」を一緒に整理します。
+    </p>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+
+<!-- ══════════════════════════════════════════
+     06 · CTA (dark section)
+══════════════════════════════════════════ -->
+<section id="cta" class="section-invert" style="padding:96px 24px;position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(60,198,224,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(60,198,224,0.04) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;"></div>
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:640px;height:320px;background:radial-gradient(ellipse,rgba(11,165,196,0.08) 0%,transparent 70%);pointer-events:none;"></div>
+
+  <div style="max-width:680px;margin:0 auto;position:relative;">
+    <div class="cta-inner" style="padding:64px;border:1px solid rgba(60,198,224,0.18);border-radius:6px;background:rgba(255,255,255,0.02);text-align:center;display:flex;flex-direction:column;align-items:center;gap:28px;backdrop-filter:blur(4px);">
+
+      <span class="eyebrow" style="justify-content:center;">Free Consultation</span>
+
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <h2 style="font-family:'Noto Sans JP',sans-serif;font-weight:700;font-size:clamp(26px,4vw,44px);letter-spacing:-0.01em;color:var(--text-inv);line-height:1.25;">
+          初期構想の無料壁打ち<br/>
+          <span style="color:var(--cyan-mid);">（30分）</span>
+        </h2>
+        <p style="font-family:'Noto Sans JP',sans-serif;font-size:14px;font-weight:400;color:var(--text-inv-2);line-height:1.9;max-width:380px;">
+          デジタルツイン導入前の整理に、営業感ゼロで対応します。まず「現場のどこから始めるか」を一緒に考えます。
+        </p>
+      </div>
+
+      <a href="/cdn-cgi/l/email-protection#2d45484141426d4c494c5d5949485e444a4303475d" class="btn-primary" style="font-size:14px;padding:16px 32px;">
+        無料相談を予約する（30分 · 無料）
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+
+      <p class="font-mono" style="font-size:9px;color:rgba(255,255,255,0.18);letter-spacing:0.16em;">
+        NO SALES PRESSURE · ZERO COMMITMENT · 30 MIN
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     FOOTER — 既存サイト構造を踏襲
+══════════════════════════════════════════ -->
+<footer class="site-footer" style="padding:28px 24px;">
+  <div style="max-width:1080px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+
+    <!-- Logo (footer) -->
+    <div style="display:flex;align-items:center;gap:10px;">
+      <!-- ★ img タグ版プレースホルダー（本番環境では src を差し替え） -->
+      <!-- <img src="logo.svg" alt="ADAPT DESIGN" width="20" height="20" /> -->
+      <svg width="20" height="20" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#A09D98" d="M156.5,14.8h1.8s.3-1.4.3-1.4h6.7s.5,1.4.5,1.4l20.6.4.5,1.4,11,.4v1.8s7.2,0,7.2,0v1.8h7.6v1.8s3.6,0,3.6,0v1.8c.3.3,6.1-.7,5.4,1.7.2.2,3,.2,3.7.5s0,1.1.6,1.4,3.6.3,3.7.4v1.8s3.6,0,3.6,0v1.8s3.6,0,3.6,0v1.8s3.6,0,3.6,0v1.8c.7.2,3.2.3,3.5.6s0,1.2.5,1.5,1.5,0,1.8.3-.2,1,.3,1.3,3.1.3,3.3.5v1.8s1.8,0,1.8,0v1.8s2.2,0,2.2,0v1.8s3.6,0,3.6,0v2.2s1.8,0,1.8,0v1.8s1.8,0,1.8,0v1.8s2.2,0,2.2,0v1.8s1.8,0,1.8,0v1.8s1.8,0,1.8,0v1.8s1.8,0,1.8,0v1.8s1.8,0,1.8,0v1.8s1.8,0,1.8,0v1.8s2,.4,2,.4l.2,1.8h1.8s0,1.8,0,1.8h1.2c0,0,0,1.8,0,1.8h2.2s0,2.2,0,2.2h1.8s0,3.1,0,3.1h1.8s0,2.2,0,2.2h1.8s.5,3.6.5,3.6h1.8s0,1.8,0,1.8h1.2c0,0,.3,1.8.3,1.8l2,.4v3.6s1.8,0,1.8,0v3.6s1.8,0,1.8,0v3.6s2,.4,2,.4l.2,3.6h1.8s0,3.3,0,3.3l1.4.5.4,3.7h1.8s0,3.6,0,3.6h1.8s0,5.8,0,5.8h1.8s0,5.4,0,5.4h1.8s.4,7.4.4,7.4l1.4.5.4,8.5,1.4.5.4,12.7h1.8s0,26.4,0,26.4h-1.8s-.4,12.7-.4,12.7l-1.4.5-.4,8.9-1.4.5-.4,5.6h-1.8v7.2h-1.8s0,5.4,0,5.4h-1.8s0,4,0,4h-1.8s-.6,3.5-.6,3.5h-1.2c-.3,1.9.2,3.6-1.9,3.9l-.5,3.7h-1.8s0,3.6,0,3.6h-1.8s0,3.6,0,3.6h-1.8s0,2.2,0,2.2h-1.8s-.5,3.6-.5,3.6h-1.8s0,1.8,0,1.8h-1.2c0,0-.3,1.8-.3,1.8l-2,.4v3.1s-1.8,0-1.8,0v2.2s-1.8,0-1.8,0v1.8s-1.8,0-1.8,0v1.8s-1.8,0-1.8,0c.6,2.3-1.5,1.9-1.8,2.5s-.3,2.7-.5,2.8h-1.8s0,2.3,0,2.3h-1.8s0,1.8,0,1.8h-1.8s0,1.8,0,1.8h-2.2s0,1.8,0,1.8c-.1.1-2.2.1-2.8.5s-.3,1.3-.7,1.6c-1,.7-2.3-.8-1.8,2h-1.8s0,1.8,0,1.8h-1.8s0,1.8,0,1.8h-3.6s0,1.8,0,1.8h-1.8s0,1.8,0,1.8h-2.2s0,1.8,0,1.8l-3.5.5v1.8s-2.3,0-2.3,0v1.8s-3.1,0-3.1,0v1.8s-4,0-4,0v1.8s-3.6,0-3.6,0v1.8c-2.5-.5-1.9,1.4-2.3,1.7s-4,0-5,.5,0,1.1-.6,1.4-3.6.3-3.7.4v1.8s-5.4,0-5.4,0v1.8s-5.4,0-5.4,0v1.8s-5.8,0-5.8,0v1.8s-6.9.4-6.9.4l-.5,1.4-10.7.4-.5,1.4-29.8.4v-35.8h-35.4v-35.4h35.4v-39h-35.4v-74.8h35.4v-37.2h-35.8v-35.2l.7-.7h35.2V14.8ZM156.5,52.5v31.4h1.8s0,2.2,0,2.2h31.8v-1.8s1.8-.3,1.8-.3v-31.5s-1.8,0-1.8,0v-1.8s-31.8,0-31.8,0v1.8s-1.8,0-1.8,0ZM156.5,164.4v31.4h35.4v-31.4h-1.8s0-1.8,0-1.8h-31.5s-.3,1.8-.3,1.8h-1.8Z"/>
+        <polygon fill="#A09D98" points="118.8 87.8 118.8 121.4 85.2 121.4 85.3 106.9 83.9 106.4 83.9 87.8 118.8 87.8"/>
+        <polygon fill="#A09D98" points="117.5 199.8 117.5 201.6 118.9 201.9 118.9 231.4 117.5 231.7 117.5 233.4 85.2 233.4 85.7 199.8 117.5 199.8"/>
+        <path fill="#A09D98" d="M117,274.6v33.1h-31.4c-.6-6.6-.6-13.3-.5-20,0-3,0-5.9,0-8.9s.3-2.9,1.7-2.5v-1.8h30.1Z"/>
+        <polygon fill="#A09D98" points="85.9 14.8 116.8 14.8 117.5 15.5 117.5 46.4 116.8 47.1 85.9 47.1 85.2 46.4 85.2 15.5 85.9 14.8"/>
+        <polygon fill="#A09D98" points="78.1 164.4 78.1 171.6 79.9 171.6 79.9 190.4 78.1 190.4 78.1 195.8 48 195.8 48 164.4 78.1 164.4"/>
+        <polygon fill="#A09D98" points="10.9 130.8 12.7 130.8 12.7 128.6 38.6 129.1 38.6 156.8 12.7 156.8 12.7 155 10.9 155 10.9 130.8"/>
+        <rect fill="#A09D98" x="87.5" y="129.1" width="27.8" height="27.8"/>
+        <path fill="#A09D98" d="M76.3,91.4v5.8s1.8,0,1.8,0v5.1s-1.8.3-1.8.3l-.4,17h-25.5c0-1.1-.4-2.2-.5-3.3-.4-5.9-.7-17.7,0-23.3s0-1.2.7-1.5h25.8Z"/>
+        <path fill="#A09D98" d="M14.4,229.8v1.8s-1.8,0-1.8,0v-1.8s-1.8,0-1.8,0v-26c1.1,0,2.2-.4,3.3-.5,5.9-.4,17.7-.7,23.3,0s1.2,0,1.5.7v25.1l-.7.7H14.4Z"/>
+        <polygon fill="#A09D98" points="38.6 54.2 38.6 80.7 10.9 80.2 10.9 54.2 38.6 54.2"/>
+        <polygon fill="#A09D98" points="76.3 267 49.8 267 49.8 241.3 50.5 240.6 75.6 240.6 76.3 241.3 76.3 267"/>
+      </svg>
+      <span style="font-family:sans-serif;font-size:13px;font-weight:500;color:var(--text-3);">ADAPT DESIGN</span>
+      <span class="font-mono" style="font-size:9px;color:var(--text-3);letter-spacing:0.08em;">R2R2R / Physical AI / HRI</span>
+    </div>
+
+    <div style="display:flex;gap:20px;align-items:center;">
+      <a href="#" class="font-mono" style="font-size:9px;color:var(--text-3);text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.15s;" onmouseover="this.style.color='var(--cyan)'" onmouseout="this.style.color='var(--text-3)'">Privacy</a>
+      <a href="mailto:info@adapt.design" class="font-mono" style="font-size:9px;color:var(--text-3);text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.15s;" onmouseover="this.style.color='var(--cyan)'" onmouseout="this.style.color='var(--text-3)'">Contact</a>
+    </div>
+
+    <span class="font-mono" style="font-size:9px;color:var(--text-3);letter-spacing:0.08em;">© 2025 ADAPT DESIGN</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  const hero   = document.getElementById('hero');
+  const canvas = document.getElementById('r2r2r-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  let W, H, cx, cy, rx, ry;
+
+  // ── ノード定義 ──
+  // canvas座標(y下向き): angle 0=右(R2), π=左(R1), 3π/2=上(SIM)
+  const NODES = [
+    { angle: Math.PI,      label: 'REAL'    },
+    { angle: Math.PI*3/2,  label: 'to SIM'  },
+    { angle: 0,            label: 'to REAL' },
+  ];
+
+  function nodePos(a) {
+    return { x: cx + rx * Math.cos(a), y: cy + ry * Math.sin(a) };
+  }
+
+  function resize() {
+    W = hero.offsetWidth; H = hero.offsetHeight;
+    canvas.width = W; canvas.height = H;
+    cx = W * 0.50; cy = H * 0.54;
+    rx = Math.min(W * 0.42, 490);
+    ry = Math.min(H * 0.36, 195);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // ── OrbitParticle ──
+  class OrbitParticle {
+    constructor(idx, total) {
+      this.angle    = (idx / total) * Math.PI * 2;
+      this.speed    = 0.0048 + Math.random() * 0.004;
+      this.size     = 2.2 + Math.random() * 2.8;
+      this.opacity  = 0.65 + Math.random() * 0.35;
+      this.trail    = [];
+      this.maxTrail = Math.floor(this.size * 9);
+    }
+    step() {
+      this.angle = (this.angle + this.speed) % (Math.PI * 2);
+      this.trail.unshift(nodePos(this.angle));
+      if (this.trail.length > this.maxTrail) this.trail.pop();
+    }
+    draw() {
+      if (this.trail.length < 2) return;
+      this.trail.forEach(({ x, y }, i) => {
+        const f = 1 - i / this.trail.length;
+        ctx.beginPath(); ctx.arc(x, y, this.size * f * 0.55, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(11,165,196,${f * this.opacity * 0.5})`; ctx.fill();
+      });
+      const { x, y } = this.trail[0];
+      const g = ctx.createRadialGradient(x, y, 0, x, y, this.size * 4);
+      g.addColorStop(0, `rgba(60,198,224,${this.opacity * 0.45})`);
+      g.addColorStop(1, 'rgba(60,198,224,0)');
+      ctx.beginPath(); ctx.arc(x, y, this.size * 4, 0, Math.PI * 2);
+      ctx.fillStyle = g; ctx.fill();
+      ctx.beginPath(); ctx.arc(x, y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(210,248,255,${this.opacity})`; ctx.fill();
+    }
+  }
+
+  const particles = Array.from({ length: 7 }, (_, i) => new OrbitParticle(i, 7));
+
+  // ── DataPacket ──
+  class DataPacket {
+    constructor(d) { this.reset(); this.delay = d; }
+    reset() {
+      const idx = [0, 1, 2];
+      this.from = idx[Math.floor(Math.random() * 3)];
+      do { this.to = idx[Math.floor(Math.random() * 3)]; } while (this.to === this.from);
+      this.progress = 0;
+      this.speed   = 0.007 + Math.random() * 0.006;
+      this.size    = 1.2 + Math.random() * 1.5;
+      this.opacity = 0.22 + Math.random() * 0.22;
+      this.delay   = 80 + Math.random() * 180;
+    }
+    step() {
+      if (this.delay > 0) { this.delay--; return; }
+      this.progress += this.speed;
+      if (this.progress >= 1) this.reset();
+    }
+    draw() {
+      if (this.delay > 0 || this.progress <= 0) return;
+      const fp = nodePos(NODES[this.from].angle);
+      const tp = nodePos(NODES[this.to].angle);
+      const x  = fp.x + (tp.x - fp.x) * this.progress;
+      const y  = fp.y + (tp.y - fp.y) * this.progress;
+      const a  = Math.sin(this.progress * Math.PI);
+      ctx.beginPath(); ctx.arc(x, y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(11,165,196,${this.opacity * a})`; ctx.fill();
+    }
+  }
+
+  const packets = Array.from({ length: 9 }, (_, i) => new DataPacket(i * 28));
+
+  // ── 描画関数 ──
+
+  function drawOrbits() {
+    ctx.save();
+    ctx.setLineDash([10, 5]);
+    ctx.strokeStyle = 'rgba(11,165,196,0.11)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2); ctx.stroke();
+    ctx.setLineDash([4, 9]);
+    ctx.strokeStyle = 'rgba(11,165,196,0.055)'; ctx.lineWidth = 0.8;
+    ctx.beginPath(); ctx.ellipse(cx, cy, rx * 0.58, ry * 0.58, 0, 0, Math.PI * 2); ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawConnections() {
+    ctx.save();
+    ctx.setLineDash([2, 9]);
+    ctx.strokeStyle = 'rgba(11,165,196,0.07)'; ctx.lineWidth = 0.8;
+    const pts = NODES.map(n => nodePos(n.angle));
+    ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y);
+    ctx.lineTo(pts[1].x, pts[1].y); ctx.lineTo(pts[2].x, pts[2].y);
+    ctx.closePath(); ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawCenter() {
+    const S = 14;
+    ctx.save(); ctx.setLineDash([]);
+    ctx.strokeStyle = 'rgba(11,165,196,0.1)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(cx - S, cy); ctx.lineTo(cx + S, cy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx, cy - S); ctx.lineTo(cx, cy + S); ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx, cy, 2, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(11,165,196,0.15)'; ctx.fill();
+    ctx.restore();
+  }
+
+  function drawRadar(t) {
+    const maxR = Math.max(rx, ry) * 1.12;
+    ctx.setLineDash([]);
+    for (let i = 0; i < 3; i++) {
+      const prog = ((t * 0.00055 + i / 3) % 1);
+      ctx.beginPath(); ctx.arc(cx, cy, prog * maxR, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(11,165,196,${(1 - prog) * 0.065})`;
+      ctx.lineWidth = 1; ctx.stroke();
+    }
+  }
+
+  function drawSweep(t) {
+    const angle = (t * 0.00075) % (Math.PI * 2);
+    const dist  = Math.max(rx, ry) * 1.25;
+    const x2 = cx + dist * Math.cos(angle);
+    const y2 = cy + dist * Math.sin(angle);
+    const g  = ctx.createLinearGradient(cx, cy, x2, y2);
+    g.addColorStop(0,   'rgba(11,165,196,0.14)');
+    g.addColorStop(0.6, 'rgba(11,165,196,0.04)');
+    g.addColorStop(1,   'rgba(11,165,196,0)');
+    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(x2, y2);
+    ctx.strokeStyle = g; ctx.lineWidth = 1.5; ctx.setLineDash([]); ctx.stroke();
+  }
+
+  function drawNode({ angle, label }, t) {
+    const { x, y } = nodePos(angle);
+    const pulse = (Math.sin(t * 0.0014 + angle) + 1) / 2;
+    const pr  = 9 + pulse * 15;
+    // グロー
+    const g = ctx.createRadialGradient(x, y, 4, x, y, pr + 14);
+    g.addColorStop(0, `rgba(11,165,196,${0.18 * pulse})`);
+    g.addColorStop(1,  'rgba(11,165,196,0)');
+    ctx.beginPath(); ctx.arc(x, y, pr + 14, 0, Math.PI * 2); ctx.fillStyle = g; ctx.fill();
+    // パルスリング
+    ctx.beginPath(); ctx.arc(x, y, pr, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(11,165,196,${0.32 * pulse})`; ctx.lineWidth = 1; ctx.setLineDash([]); ctx.stroke();
+    // 外リング
+    ctx.beginPath(); ctx.arc(x, y, 8, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(11,165,196,0.28)'; ctx.lineWidth = 1; ctx.stroke();
+    // コア
+    ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(11,165,196,0.72)'; ctx.fill();
+    ctx.beginPath(); ctx.arc(x, y, 2.4, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(230,250,255,0.95)'; ctx.fill();
+    // ラベル
+    const lx = cx + (rx + 34) * Math.cos(angle);
+    const ly = cy + (ry + 34) * Math.sin(angle);
+    ctx.save();
+    ctx.font = '500 8px "DM Mono", monospace';
+    ctx.fillStyle = 'rgba(11,165,196,0.42)';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(label, lx, ly);
+    ctx.restore();
+  }
+
+  // ── アニメーションループ ──
+  let t = 0;
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+    drawRadar(t); drawSweep(t);
+    drawOrbits(); drawConnections(); drawCenter();
+    NODES.forEach(n => drawNode(n, t));
+    particles.forEach(p => { p.step(); p.draw(); });
+    packets.forEach(p   => { p.step(); p.draw(); });
+    t++; requestAnimationFrame(animate);
+  }
+
+  animate();
+}());
+</script>
+</body>
+</html>
