@@ -97,7 +97,7 @@ public class RobotArmController : MonoBehaviour
 
                 var drive = targetJoints[i].xDrive;
                 drive.forceLimit = 1000000f;
-                drive.target    += angle * 0.005f;
+                drive.target    += angle * 0.05f;
                 drive.target     = Mathf.Clamp(drive.target, lowerLimits[i], upperLimits[i]);
                 targetJoints[i].xDrive = drive;
                 targetJoints[i].SetDriveTarget(ArticulationDriveAxis.X, drive.target);
