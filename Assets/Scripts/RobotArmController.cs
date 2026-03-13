@@ -153,7 +153,7 @@ public class RobotArmController : MonoBehaviour
                     var cupRb = cupObject.GetComponent<Rigidbody>();
                     if (cupRb != null)
                     {
-                        cupRb.linearVelocity  = Vector3.zero;
+                        cupRb.velocity = Vector3.zero;
                         cupRb.angularVelocity = Vector3.zero;
                     }
                     Destroy(graspJoint);
