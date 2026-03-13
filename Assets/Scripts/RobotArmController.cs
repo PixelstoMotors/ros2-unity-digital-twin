@@ -149,6 +149,13 @@ public class RobotArmController : MonoBehaviour
                 // FixedJoint を破棄して設置
                 if (graspJoint != null)
                 {
+                    // 解放前にカップの速度をゼロリセット（飛び散り防止）
+                    var cupRb = cupObject.GetComponent<Rigidbody>();
+                    if (cupRb != null)
+                    {
+                        cupRb.linearVelocity  = Vector3.zero;
+                        cupRb.angularVelocity = Vector3.zero;
+                    }
                     Destroy(graspJoint);
                     graspJoint = null;
                     Debug.Log("[RobotArm] PLACE: FixedJoint 破棄完了");
