@@ -160,6 +160,8 @@ public class RobotArmController : MonoBehaviour
                     graspJoint = null;
                     Debug.Log("[RobotArm] PLACE: FixedJoint 破棄完了");
                 }
+                isCooldown = true;
+                Invoke(nameof(ResetCooldown), 2.0f);
                 currentState = State.REACH_CUP;
                 Debug.Log("[RobotArm] → REACH_CUP（ループ）");
                 break;
