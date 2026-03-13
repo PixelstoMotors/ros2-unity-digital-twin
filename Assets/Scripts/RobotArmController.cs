@@ -168,7 +168,8 @@ public class RobotArmController : MonoBehaviour
         {
             case State.REACH_CUP:
             case State.GRASP:
-                return cachedHandlePosition;
+                // handlePoint は Rigidbody で動くため毎フレーム取得
+                return handlePoint != null ? handlePoint.position : transform.position;
             case State.REACH_PLACE:
             case State.PLACE:
                 return cachedPlacePosition;
