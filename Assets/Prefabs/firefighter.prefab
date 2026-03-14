@@ -1341,8 +1341,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3358613340424477595}
-  - component: {fileID: 1304368208210937422}
-  - component: {fileID: 6734420165966950192}
   m_Layer: 0
   m_Name: firefighter
   m_TagString: robot
@@ -1367,38 +1365,6 @@ Transform:
   - {fileID: 6109056959691042613}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1304368208210937422
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 907867758977913952}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbf4c79288754864b8d522b69f4b52a8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FilePath: 
-  chosenAxis: 0
-  currentOrientation: 0
-  collisionExceptions: []
---- !u!114 &6734420165966950192
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 907867758977913952}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b76b9fef56bd445b80e32bed34ecb5d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_speedMultiplier: 1
-  m_angleOffset: 0
-  m_horizontalSwingRange: 30
-  m_verticalSwingRange: 30
 --- !u!1 &914668309059012648
 GameObject:
   m_ObjectHideFlags: 0
@@ -2572,6 +2538,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7095359346885299287}
   - {fileID: 2174655032938095146}
   - {fileID: 4598304095381578832}
   - {fileID: 7288693645048923921}
@@ -2600,10 +2567,10 @@ ArticulationBody:
   m_Enabled: 1
   serializedVersion: 5
   m_Mass: 1
-  m_ParentAnchorPosition: {x: 0, y: 0.037999995, z: 0}
-  m_ParentAnchorRotation: {x: 0, y: 0, z: 0.0000018179417, w: 1.0000001}
-  m_AnchorPosition: {x: 0, y: 0, z: 0}
-  m_AnchorRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
+  m_ParentAnchorPosition: {x: -0.026148524, y: 0.017520182, z: -0.027317286}
+  m_ParentAnchorRotation: {x: 0.40895885, y: -0.047023386, z: -0.040611476, w: 0.91043526}
+  m_AnchorPosition: {x: -0.020479716, y: 0.0261486, z: -0.027317286}
+  m_AnchorRotation: {x: 0.25592643, y: -0.32242858, z: -0.6724927, w: 0.61505705}
   m_MatchAnchors: 1
   m_ArticulationJointType: 2
   m_LinearX: 1
@@ -2618,7 +2585,7 @@ ArticulationBody:
     stiffness: 20000
     damping: 2000
     forceLimit: 1000
-    target: 0
+    target: 100
     targetVelocity: 0
     driveType: 0
   m_YDrive:
@@ -6921,10 +6888,10 @@ ArticulationBody:
   m_Enabled: 1
   serializedVersion: 5
   m_Mass: 1
-  m_ParentAnchorPosition: {x: 0, y: 0.1, z: 0}
-  m_ParentAnchorRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_AnchorPosition: {x: 0, y: 0, z: 0}
-  m_AnchorRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
+  m_ParentAnchorPosition: {x: 0, y: 0.10381256, z: 0.0031622648}
+  m_ParentAnchorRotation: {x: -0.13904905, y: -0.13904902, z: -0.6933004, w: 0.6933004}
+  m_AnchorPosition: {x: 0, y: 0.003812559, z: 0.0031622648}
+  m_AnchorRotation: {x: -0.13904905, y: -0.13904902, z: -0.6933004, w: 0.6933004}
   m_MatchAnchors: 1
   m_ArticulationJointType: 2
   m_LinearX: 1
@@ -6939,7 +6906,7 @@ ArticulationBody:
     stiffness: 20000
     damping: 2000
     forceLimit: 1000
-    target: 0
+    target: 100
     targetVelocity: 0
     driveType: 0
   m_YDrive:
@@ -6984,7 +6951,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4899898117312021436}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 63b6193734b4c8444bcfdf4e9953fe2b, type: 3}
   m_Name: 
@@ -9751,6 +9718,7 @@ Transform:
   m_LocalScale: {x: 0.9999999, y: 0.9999999, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6049648207267083352}
   - {fileID: 3354310806679151581}
   - {fileID: 1269161157663412708}
   m_Father: {fileID: 7870124245498317750}
@@ -10597,6 +10565,37 @@ Transform:
   - {fileID: 6874396554945067256}
   m_Father: {fileID: 5248060647035474107}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8049629920531750606
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7095359346885299287}
+  m_Layer: 0
+  m_Name: EndEffector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7095359346885299287
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8049629920531750606}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 259761189527872232}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8071254428509181013
 GameObject:
   m_ObjectHideFlags: 0
@@ -11371,6 +11370,37 @@ MonoBehaviour:
   jointName: joint3_to_joint2
   EffortLimit: 1000
   VelocityLimit: 1000
+--- !u!1 &8523914215868792647
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6049648207267083352}
+  m_Layer: 0
+  m_Name: EndEffector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6049648207267083352
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8523914215868792647}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3305490789228069572}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8532622661596437461
 GameObject:
   m_ObjectHideFlags: 0
