@@ -224,15 +224,15 @@ public class RobotArmController : MonoBehaviour
                 "{15:F4},{16:F4},{17:F4},{18:F4},{19:F4},{20:F4}," +
                 "{21:F4},{22:F4},{23:F4}",
                 Time.time, currentState.ToString(), dist,
-                targetJoints[0].jointPosition[0], targetJoints[1].jointPosition[0],
-                targetJoints[2].jointPosition[0], targetJoints[3].jointPosition[0],
-                targetJoints[4].jointPosition[0], targetJoints[5].jointPosition[0],
-                targetJoints[0].jointVelocity[0],  targetJoints[1].jointVelocity[0],
-                targetJoints[2].jointVelocity[0],  targetJoints[3].jointVelocity[0],
-                targetJoints[4].jointVelocity[0],  targetJoints[5].jointVelocity[0],
-                targetJoints[0].jointForce[0],     targetJoints[1].jointForce[0],
-                targetJoints[2].jointForce[0],     targetJoints[3].jointForce[0],
-                targetJoints[4].jointForce[0],     targetJoints[5].jointForce[0],
+                GetDOF(targetJoints[0].jointPosition), GetDOF(targetJoints[1].jointPosition),
+                GetDOF(targetJoints[2].jointPosition), GetDOF(targetJoints[3].jointPosition),
+                GetDOF(targetJoints[4].jointPosition), GetDOF(targetJoints[5].jointPosition),
+                GetDOF(targetJoints[0].jointVelocity),  GetDOF(targetJoints[1].jointVelocity),
+                GetDOF(targetJoints[2].jointVelocity),  GetDOF(targetJoints[3].jointVelocity),
+                GetDOF(targetJoints[4].jointVelocity),  GetDOF(targetJoints[5].jointVelocity),
+                GetDOF(targetJoints[0].jointForce),     GetDOF(targetJoints[1].jointForce),
+                GetDOF(targetJoints[2].jointForce),     GetDOF(targetJoints[3].jointForce),
+                GetDOF(targetJoints[4].jointForce),     GetDOF(targetJoints[5].jointForce),
                 ee.x, ee.y, ee.z);
             frameLogWriter.WriteLine(line);
         }
@@ -244,6 +244,9 @@ public class RobotArmController : MonoBehaviour
         Vector3 ee = endEffector != null ? endEffector.position : Vector3.zero;
         eventLogWriter.WriteLine($"{Time.time:F4},{eventName},{dist:F4},{ee.x:F4},{ee.y:F4},{ee.z:F4}");
     }
+
+    private float GetDOF(ArticulationReducedSpace s) 
+        => s.dofCount > 0 ? s[0] : 0f;
 
     void OnDestroy()
     {
