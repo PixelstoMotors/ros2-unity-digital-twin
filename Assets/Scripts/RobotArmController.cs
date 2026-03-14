@@ -49,6 +49,24 @@ public class RobotArmController : MonoBehaviour
         Debug.Log($"[START] handlePoint={(handlePoint == null ? "NULL" : handlePoint.name)}");
         Debug.Log($"[START] placeTarget={(placeTarget == null ? "NULL" : placeTarget.name)}");
 
+        // アームとカップの衝突を無効化（把持前の弾き飛び防止）
+        if (cupObject != null)
+        {
+            var cupColliders = cupObject.GetComponentsInChildren<Collider>();
+            foreach (var joint in targetJoints)
+            {
+                if (joint == null) continue;
+                var armColliders = joint.GetComponentsInChildren<Collider>();
+                foreach (var armCol in armColliders)
+                {
+                    foreach (var cupCol in cupColliders)
+                    {
+                        Physics.IgnoreCollision(armCol, cupCol, true);
+                    }
+                }
+            }
+        }
+
         cachedHandlePosition = handlePoint.position;
         cachedPlacePosition = placeTarget.transform.position;
         positionsCached = true;
