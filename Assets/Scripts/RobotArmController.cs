@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.IO;
 
 public class RobotArmController : MonoBehaviour
 {
@@ -28,6 +29,11 @@ public class RobotArmController : MonoBehaviour
     private Vector3 cachedHandlePosition;
     private Vector3 cachedPlacePosition;
     private bool positionsCached = false;
+
+    // ── CSV出力 ────────────────────────────────────────────
+    private StreamWriter frameLogWriter;
+    private StreamWriter eventLogWriter;
+    private string logsDirectory;
 
     // ── Unity ライフサイクル ──────────────────────────────
     void Start()
@@ -70,6 +76,23 @@ public class RobotArmController : MonoBehaviour
         cachedHandlePosition = handlePoint.position;
         cachedPlacePosition = placeTarget.transform.position;
         positionsCached = true;
+
+        // ── CSV出力の初期化 ────────────────────────────────
+        logsDirectory = Path.Combine(Application.dataPath, "..", "Logs");
+        Directory.CreateDirectory(logsDirectory);
+
+        // フレームログCSVをオープン
+        string frameLogPath = Path.Combine(logsDirectory, "robot_frame_log.csv");
+        frameLogWriter = new StreamWriter(frameLogPath, false) { AutoFlush = true };
+        frameLogWriter.WriteLine("time,state,dist,j0_pos,j1_pos,j2_pos,j3_pos,j4_pos,j5_pos,j0_vel,j1_vel,j2_vel,j3_vel,j4_vel,j5_vel,j0_force,j1_force,j2_force,j3_force,j4_force,j5_force,ee_x,ee_y,ee_z");
+
+        // イベントログCSVをオープン
+        string eventLogPath = Path.Combine(logsDirectory, "robot_event_log.csv");
+        eventLogWriter = new StreamWriter(eventLogPath, false) { AutoFlush = true };
+        eventLogWriter.WriteLine("time,event,dist,ee_x,ee_y,ee_z");
+
+        Debug.Log($"[CSV] Frame log: {frameLogPath}");
+        Debug.Log($"[CSV] Event log: {eventLogPath}");
     }
 
     void LateUpdate()
@@ -135,6 +158,7 @@ public class RobotArmController : MonoBehaviour
                     Invoke(nameof(ResetCooldown), 1.5f);
                     currentState = State.GRASP;
                     Debug.Log("[RobotArm] → GRASP");
+                    WriteEventLog("TO_GRASP", dist);
                 }
                 break;
 
@@ -148,8 +172,10 @@ public class RobotArmController : MonoBehaviour
                     graspJoint.breakForce  = Mathf.Infinity;
                     graspJoint.breakTorque = Mathf.Infinity;
                     Debug.Log("[RobotArm] GRASP: FixedJoint 生成完了");
+                    WriteEventLog("FIXEDJOINT_CREATED", dist);
                     currentState = State.REACH_PLACE;
                     Debug.Log("[RobotArm] → REACH_PLACE");
+                    WriteEventLog("TO_REACH_PLACE", dist);
                 }
                 break;
 
@@ -160,6 +186,7 @@ public class RobotArmController : MonoBehaviour
                     Invoke(nameof(ResetCooldown), 1.5f);
                     currentState = State.PLACE;
                     Debug.Log("[RobotArm] → PLACE");
+                    WriteEventLog("TO_PLACE", dist);
                 }
                 break;
 
@@ -177,13 +204,51 @@ public class RobotArmController : MonoBehaviour
                     Destroy(graspJoint);
                     graspJoint = null;
                     Debug.Log("[RobotArm] PLACE: FixedJoint 破棄完了");
+                    WriteEventLog("FIXEDJOINT_DESTROYED", dist);
                 }
                 isCooldown = true;
                 Invoke(nameof(ResetCooldown), 2.0f);
                 currentState = State.REACH_CUP;
                 Debug.Log("[RobotArm] → REACH_CUP（ループ）");
+                WriteEventLog("TO_REACH_CUP", dist);
                 break;
         }
+
+        // ── フレームログ出力 ──────────────────────────────
+        if (frameLogWriter != null)
+        {
+            Vector3 ee = endEffector.position;
+            string line = string.Format("{0:F4},{1},{2:F4}," +
+                "{3:F4},{4:F4},{5:F4},{6:F4},{7:F4},{8:F4}," +
+                "{9:F4},{10:F4},{11:F4},{12:F4},{13:F4},{14:F4}," +
+                "{15:F4},{16:F4},{17:F4},{18:F4},{19:F4},{20:F4}," +
+                "{21:F4},{22:F4},{23:F4}",
+                Time.time, currentState.ToString(), dist,
+                targetJoints[0].jointPosition[0], targetJoints[1].jointPosition[0],
+                targetJoints[2].jointPosition[0], targetJoints[3].jointPosition[0],
+                targetJoints[4].jointPosition[0], targetJoints[5].jointPosition[0],
+                targetJoints[0].jointVelocity[0],  targetJoints[1].jointVelocity[0],
+                targetJoints[2].jointVelocity[0],  targetJoints[3].jointVelocity[0],
+                targetJoints[4].jointVelocity[0],  targetJoints[5].jointVelocity[0],
+                targetJoints[0].jointForce[0],     targetJoints[1].jointForce[0],
+                targetJoints[2].jointForce[0],     targetJoints[3].jointForce[0],
+                targetJoints[4].jointForce[0],     targetJoints[5].jointForce[0],
+                ee.x, ee.y, ee.z);
+            frameLogWriter.WriteLine(line);
+        }
+    }
+
+    private void WriteEventLog(string eventName, float dist)
+    {
+        if (eventLogWriter == null) return;
+        Vector3 ee = endEffector != null ? endEffector.position : Vector3.zero;
+        eventLogWriter.WriteLine($"{Time.time:F4},{eventName},{dist:F4},{ee.x:F4},{ee.y:F4},{ee.z:F4}");
+    }
+
+    void OnDestroy()
+    {
+        frameLogWriter?.Close();
+        eventLogWriter?.Close();
     }
 
     private void ResetCooldown() { isCooldown = false; }
