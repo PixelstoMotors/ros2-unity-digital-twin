@@ -64,8 +64,8 @@ public class RobotArmController : MonoBehaviour
 
         // ── CCD IK（10回反復） ────────────────────────────
         // 関節制限値（mecharm_270_m5 URDFより）
-        float[] lowerLimits = { -160f, -75f, -175f, -155f, -115f, -180f };
-        float[] upperLimits = {  160f, 120f,   65f,  155f,  115f,  180f };
+        float[] lowerLimits = { -160f, -75f, -175f, -155f, -100f, -180f };
+        float[] upperLimits = {  160f, 120f,   45f,  155f,  100f,  180f };
 
         for (int iter = 0; iter < CCD_ITERATIONS; iter++)
         {
