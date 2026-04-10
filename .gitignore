@@ -46,3 +46,13 @@ Packages/packages-lock.json
 Assets/GaussianAssets/*.bytes
 
 .tmp.driveupload/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
